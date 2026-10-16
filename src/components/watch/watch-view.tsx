@@ -41,7 +41,7 @@ export function WatchView({ video, category, series, related, next }: Props) {
           className={cn(
             "mx-auto w-full lg:sticky lg:top-24",
             video.orientation === "vertical"
-              ? "max-w-[min(100%,calc((100svh_-_9.5rem)*9/16))] lg:w-[min(440px,calc((100svh_-_12rem)*9/16))] lg:max-w-none"
+              ? "max-w-[min(100%,calc((100svh_-_9.5rem)*9/16))] lg:w-[clamp(280px,calc((100svh_-_12rem)*9/16),440px)] lg:max-w-none"
               : "lg:w-[min(760px,55vw)]",
           )}
         >

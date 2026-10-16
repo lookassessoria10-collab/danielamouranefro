@@ -8,24 +8,20 @@ Todas as páginas são geradas de forma estática; não há banco de dados, cont
 
 ---
 
-## ⚠️ Antes de publicar: liberar os vídeos no Google Drive
+## Vídeos no Google Drive
 
-Hoje **os 27 vídeos pedem login do Google** para tocar. Os IDs estão corretos (o Drive responde
-"acesso negado", e não "arquivo inexistente"), mas os arquivos não estão compartilhados publicamente.
-Sem isso, o visitante vê "Acesse a sua conta do Google" dentro do player.
+Pasta principal (**DANIELA REELS**), compartilhada como "Qualquer pessoa com o link · Leitor":
+https://drive.google.com/drive/folders/1NfB18ZpqgeVDqVukuIqoB4_chC35sCey
 
-1. No Google Drive, clique com o botão direito na pasta **DANIELA REELS** → **Compartilhar**.
-2. Em **Acesso geral**, escolha **Qualquer pessoa com o link** → **Leitor**.
-3. Confira:
+Situação conferida em 16/10/2026, sem login:
 
-   ```bash
-   npm run check:drive
-   ```
+- `npm run check:drive` → **27 de 27 vídeos com reprodução pública**.
+- Os 27 vídeos das 5 subpastas batem um a um com o catálogo (ID e nome do arquivo); nenhum vídeo fora do catálogo.
+- Os arquivos respondem como MP4 sem autenticação.
 
-   O resultado esperado é `27 de 27 vídeos com reprodução pública.`
-
-Se a opção "Qualquer pessoa com o link" não aparecer, a conta é um Google Workspace com
-compartilhamento externo bloqueado: o administrador precisa liberar em
+Arquivos novos herdam o compartilhamento da pasta. Se algum dia o player pedir login, confira o
+compartilhamento da pasta e rode `npm run check:drive`. Em contas Google Workspace com compartilhamento
+externo bloqueado, o administrador libera em
 *Admin → Apps → Google Workspace → Drive e Documentos → Configurações de compartilhamento*.
 
 Nada é movido, renomeado ou duplicado: o site só usa os IDs dos arquivos.
