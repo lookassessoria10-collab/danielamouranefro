@@ -5,7 +5,7 @@ import { videos } from "../src/data/videos.ts";
 import { categories, collections, seriesList } from "../src/data/taxonomy.ts";
 import { discoveryPaths } from "../src/data/discovery.ts";
 import { profiles } from "../src/data/profiles.ts";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 const PHOTOS = ["modelo-renal", "consultorio", "retrato", "verde", "sorriso"];
 
@@ -79,6 +79,18 @@ for (const path of discoveryPaths) {
 }
 for (const p of profiles) {
   for (const h of p.hero) if (!ids.has(h.videoId)) err(`Perfil ${p.id}: destaque inexistente (${h.videoId})`);
+}
+
+// vercel.json precisa ter exatamente uma rota de vídeo por item do catálogo.
+try {
+  const routes = JSON.parse(readFileSync("vercel.json", "utf8")).rewrites ?? [];
+  for (const v of videos) {
+    const r = routes.find((x) => x.source === `/media/${v.id}.mp4`);
+    if (!r || !r.destination.includes(`id=${v.driveId}&`)) err(`${v.id}: rota de vídeo ausente ou desatualizada no vercel.json (rode npm run sync:media)`);
+  }
+  if (routes.length !== videos.length) err(`vercel.json tem ${routes.length} rotas para ${videos.length} vídeos (rode npm run sync:media)`);
+} catch {
+  err("vercel.json ausente (rode npm run sync:media)");
 }
 
 const perCategory = categories.map((c) => `${c.shortTitle}: ${videos.filter((v) => v.category === c.id).length}`).join(" · ");

@@ -1,0 +1,113 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/media/v02.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1IFbxCKWFZ1LXGZ8WBjs16W4zhCBNruIr&export=download"
+    },
+    {
+      "source": "/media/v04.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1j2eknPwldiajkMyOC4Mgw_mfkfZGD6c_&export=download"
+    },
+    {
+      "source": "/media/v07.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1_t-C3PyiCOo62MRRANGIeRjk9RCVpKGH&export=download"
+    },
+    {
+      "source": "/media/v10.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1jc9Bu7XbzTytfMB_ioNInKZdboToijlr&export=download"
+    },
+    {
+      "source": "/media/v19.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1PyPbcE_Y3wRaLYJ_H9OecwRdsQWCXSr4&export=download"
+    },
+    {
+      "source": "/media/v20.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1_ymGnuZhm4e1RitOZC13Fjc9OkGbZzuw&export=download"
+    },
+    {
+      "source": "/media/v01.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1XMU62t81u9jl4l9pJ3PCvrBuDxEknLmu&export=download"
+    },
+    {
+      "source": "/media/v03.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1LzDRlvl8D054RUPw3ucSswLrPt5qT3pU&export=download"
+    },
+    {
+      "source": "/media/v05.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1aStRmoV8vpWwkcH1GzSyQEnXiv3vByxR&export=download"
+    },
+    {
+      "source": "/media/v06.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1llf7gzp9X3IfrniKDQSguPrOTN1i1qtK&export=download"
+    },
+    {
+      "source": "/media/v12.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1dkeILi6KavFiW38rYEvv3-Vc8OuNyUJW&export=download"
+    },
+    {
+      "source": "/media/v22.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1wEWPKmzuKyHS6EVJ0KTvMWSQL6pFlvZc&export=download"
+    },
+    {
+      "source": "/media/v13.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1lAbXno0ZdrTuNdw457kB_6A3gCf3A5dI&export=download"
+    },
+    {
+      "source": "/media/v15.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1reF2RoPKWKat-mUjJyD3JgIKksF2KwTH&export=download"
+    },
+    {
+      "source": "/media/v24.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1HKP3qXDWBZlAyauA0Hhta0pSc8O8-WlC&export=download"
+    },
+    {
+      "source": "/media/v26.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1ylj2SZccshiY12BfBaDwjz1q2HfloC24&export=download"
+    },
+    {
+      "source": "/media/v09.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1d_o6zM0KySPblaVJkT9tNAeYHJtvOwQG&export=download"
+    },
+    {
+      "source": "/media/v11.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1tmqu8YUOEoeM5cCNcOGnESrHOuBiD5p-&export=download"
+    },
+    {
+      "source": "/media/v14.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1MHC2F6A-9cqF1Djr2BSmSpfl2BNxRWrG&export=download"
+    },
+    {
+      "source": "/media/v16.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1KhOagEroStLZL1prJ3cUlp7mufz4Ajdx&export=download"
+    },
+    {
+      "source": "/media/v21.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1LFWbsc_oMyf11Fe6IZ03JKBZoiDx9WP6&export=download"
+    },
+    {
+      "source": "/media/v25.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1ZwMXqGFB_9eerQBsfFACQpgJU4S-SpDo&export=download"
+    },
+    {
+      "source": "/media/v08.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1SpAXbpV9HjKaQLpEEK2Odg2cvra_NfZe&export=download"
+    },
+    {
+      "source": "/media/v17.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1kHCMj7Ez2-BCtAWrVny_Tuf9PqRO-d1M&export=download"
+    },
+    {
+      "source": "/media/v18.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1BcxslIhPj9W__zG-vZsgH0ejHDbODtP9&export=download"
+    },
+    {
+      "source": "/media/v23.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1nP89jK8-j3HRzqU5sb1HqYR0D7TQi7DS&export=download"
+    },
+    {
+      "source": "/media/v27.mp4",
+      "destination": "https://drive.usercontent.google.com/download?id=1g48vMsZrVid1bkWv2xq1dvXNqg4--uNn&export=download"
+    }
+  ]
+}

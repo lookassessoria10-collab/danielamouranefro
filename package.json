@@ -10,7 +10,8 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "check:catalog": "node --no-warnings scripts/check-catalog.mjs",
-    "check:drive": "node --no-warnings scripts/check-drive.mjs"
+    "check:drive": "node --no-warnings scripts/check-drive.mjs",
+    "sync:media": "node --no-warnings scripts/sync-media-routes.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.57.0",

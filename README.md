@@ -45,6 +45,7 @@ Abra http://localhost:3000.
 | `npm run check:catalog` | Valida o catálogo: IDs únicos, relações, coleções, trilha e destaques |
 | `npm run check:drive` | Testa, sem login, se cada vídeo toca publicamente no Drive |
 | `node scripts/fetch-frames.mjs` | Baixa do Drive um quadro real de cada vídeo para as capas (`public/frames`) |
+| `npm run sync:media` | Atualiza as rotas de vídeo do `vercel.json` a partir do catálogo (rode ao cadastrar vídeos) |
 | `node scripts/brand-assets.mjs` | Gera as versões do logotipo, as peças da abertura e os ícones a partir do arquivo oficial |
 
 ## Publicar na Vercel
@@ -87,7 +88,7 @@ Todo o conteúdo fica em `src/data/` — os componentes visuais não guardam tí
 4. Rode `node scripts/fetch-frames.mjs` para baixar o quadro da capa e ajuste `cover.faceY`
    (altura do rosto no quadro, em %). Se o quadro tiver texto por cima ou estiver desfocado, use
    `cover: { style: "type", photo: "retrato" }` — capa tipográfica com uma foto real da Dra. Daniela.
-5. Rode `npm run check:catalog` e `npm run check:drive`.
+5. Rode `npm run sync:media`, `npm run check:catalog` e `npm run check:drive`.
 
 O vídeo aparece automaticamente na categoria, na busca, nas coleções e nas sugestões.
 
@@ -123,8 +124,8 @@ O vídeo aparece automaticamente na categoria, na busca, nas coleções e nas su
 
 - **Player:** `<video>` nativo do navegador, sem autoplay, na proporção original 9:16 e com a capa do
   catálogo. O arquivo continua hospedado no Google Drive e chega pelo próprio domínio em
-  `/media/<id>.mp4` (rotas geradas a partir do catálogo em `next.config.ts`; nenhum outro arquivo passa
-  por ali). Motivo: o player incorporado do Drive (`/file/d/ID/preview`) mostra dois conjuntos de
+  `/media/<id>.mp4` (rotas geradas a partir do catálogo em `vercel.json` — `npm run sync:media` — e repetidas em
+  `next.config.ts` para o servidor local; nenhum outro arquivo passa por ali). Motivo: o player incorporado do Drive (`/file/d/ID/preview`) mostra dois conjuntos de
   controles no iPhone e no Android, e o Drive recusa pedidos de vídeo feitos diretamente por outro site.
 - **Plano B automático:** se o arquivo não carregar (erro, cota do Drive, rede), o site troca sozinho para o
   player incorporado do Drive. Abaixo do player há sempre o link "Abrir no Google Drive".
