@@ -121,9 +121,15 @@ O vídeo aparece automaticamente na categoria, na busca, nas coleções e nas su
 
 ## Decisões e limites conhecidos
 
-- **Player:** `drive.google.com/file/d/ID/preview` em iframe, a mesma lógica do Instituto Landim,
-  sem autoplay e na proporção original 9:16 (as 27 miniaturas do Drive confirmam vídeos verticais).
-  Abaixo do player há sempre o link "Abrir no Google Drive" como alternativa.
+- **Player:** `<video>` nativo do navegador, sem autoplay, na proporção original 9:16 e com a capa do
+  catálogo. O arquivo continua hospedado no Google Drive e chega pelo próprio domínio em
+  `/media/<id>.mp4` (rotas geradas a partir do catálogo em `next.config.ts`; nenhum outro arquivo passa
+  por ali). Motivo: o player incorporado do Drive (`/file/d/ID/preview`) mostra dois conjuntos de
+  controles no iPhone e no Android, e o Drive recusa pedidos de vídeo feitos diretamente por outro site.
+- **Plano B automático:** se o arquivo não carregar (erro, cota do Drive, rede), o site troca sozinho para o
+  player incorporado do Drive. Abaixo do player há sempre o link "Abrir no Google Drive".
+- **Tráfego:** cada reprodução passa pela Vercel (os arquivos têm de 3 a 5 MB). O plano gratuito inclui
+  100 GB/mês — algo como 20 mil reproduções completas. Acompanhe em Vercel → Usage.
 - **Aviso de acesso:** o site testa a miniatura pública de cada vídeo; se ela não carrega, mostra um
   aviso orientando a abrir no Drive. Isso não bloqueia o player.
 - **Tempo assistido:** o player do Drive não informa progresso, então não há barras de progresso.

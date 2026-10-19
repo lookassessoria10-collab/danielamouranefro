@@ -1,25 +1,37 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ExternalLink, LoaderCircle, TriangleAlert } from "lucide-react";
-import { drivePreviewUrl, driveThumbnailUrl, driveViewUrl } from "@/lib/drive";
+import { frameSrc } from "@/components/cards/cover";
+import { drivePreviewUrl, driveThumbnailUrl, driveViewUrl, mediaSrc } from "@/lib/drive";
 import type { Video } from "@/data/types";
 import { cn } from "@/lib/utils";
 
 type Access = "checking" | "public" | "restricted";
+type Mode = "native" | "embed";
+
+/** Depois do play, quanto esperar o vídeo começar antes de trocar para o player do Drive. */
+const STALL_MS = 12000;
 
 /**
- * Player incorporado do Google Drive (/file/d/ID/preview), sem autoplay.
- * Respeita a proporção original: 9:16 para Reels, 16:9 para vídeos horizontais.
+ * Player do Nefroflix. O arquivo continua hospedado no Google Drive.
  *
- * O Drive não informa erros de dentro do iframe. Para orientar o visitante,
- * testamos a miniatura pública do arquivo: se ela não carrega, o arquivo
- * provavelmente não está compartilhado como "Qualquer pessoa com o link".
+ * 1. "native": <video> do próprio navegador, com o arquivo entregue em /media/<id>.mp4
+ *    (ver next.config.ts). Um único conjunto de controles, inclusive no iPhone e no Android,
+ *    na resolução original e com a capa do catálogo.
+ * 2. "embed": se o arquivo não carregar (erro, cota do Drive, rede), troca sozinho para o
+ *    player incorporado do Drive (/file/d/ID/preview), que era o comportamento anterior.
+ *
+ * Sem autoplay. Respeita a proporção original: 9:16 para Reels, 16:9 para vídeos horizontais.
  */
 export function DrivePlayer({ video, className }: { video: Video; className?: string }) {
-  const [loaded, setLoaded] = useState(false);
+  const [mode, setMode] = useState<Mode>("native");
+  const [embedLoaded, setEmbedLoaded] = useState(false);
   const [access, setAccess] = useState<Access>("checking");
+  const stallTimer = useRef<number | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
+  // A miniatura pública indica se o arquivo está compartilhado como "Qualquer pessoa com o link".
   useEffect(() => {
     let active = true;
     const probe = new Image();
@@ -33,6 +45,32 @@ export function DrivePlayer({ video, className }: { video: Video; className?: st
     };
   }, [video.driveId]);
 
+  // O <video> vem pronto do servidor e começa a carregar antes do React: um erro que
+  // aconteça nesse intervalo não chega ao onError, então conferimos ao montar.
+  useEffect(() => {
+    const el = videoRef.current;
+    if (el && (el.error || el.networkState === HTMLMediaElement.NETWORK_NO_SOURCE)) setMode("embed");
+    return () => clearStall();
+  }, []);
+
+  function clearStall() {
+    if (stallTimer.current) window.clearTimeout(stallTimer.current);
+    stallTimer.current = null;
+  }
+
+  const fallBack = () => {
+    clearStall();
+    setMode("embed");
+  };
+
+  const onPlay = () => {
+    clearStall();
+    stallTimer.current = window.setTimeout(() => {
+      const el = videoRef.current;
+      if (el && el.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) fallBack();
+    }, STALL_MS);
+  };
+
   const vertical = video.orientation === "vertical";
 
   return (
@@ -43,25 +81,44 @@ export function DrivePlayer({ video, className }: { video: Video; className?: st
           vertical ? "aspect-[9/16]" : "aspect-video",
         )}
       >
-        {!loaded && (
-          <div className="skeleton absolute inset-0 grid place-items-center" aria-hidden>
-            <div className="flex flex-col items-center gap-3 text-fog">
-              <LoaderCircle size={28} className="animate-spin motion-reduce:animate-none" />
-              <span className="text-sm">Carregando vídeo…</span>
-            </div>
-          </div>
+        {mode === "native" ? (
+          <video
+            ref={videoRef}
+            src={mediaSrc(video)}
+            poster={frameSrc(video)}
+            controls
+            playsInline
+            preload="metadata"
+            controlsList="nodownload"
+            aria-label={`Vídeo: ${video.title}`}
+            onError={fallBack}
+            onPlay={onPlay}
+            onPlaying={clearStall}
+            className="absolute inset-0 h-full w-full bg-black object-contain"
+          />
+        ) : (
+          <>
+            {!embedLoaded && (
+              <div className="skeleton absolute inset-0 grid place-items-center" aria-hidden>
+                <div className="flex flex-col items-center gap-3 text-fog">
+                  <LoaderCircle size={28} className="animate-spin motion-reduce:animate-none" />
+                  <span className="text-sm">Carregando vídeo…</span>
+                </div>
+              </div>
+            )}
+            <iframe
+              src={drivePreviewUrl(video.driveId)}
+              title={`Vídeo: ${video.title}`}
+              allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+              allowFullScreen
+              onLoad={() => setEmbedLoaded(true)}
+              className={cn(
+                "absolute inset-0 h-full w-full border-0 transition-opacity duration-500",
+                embedLoaded ? "opacity-100" : "opacity-0",
+              )}
+            />
+          </>
         )}
-        <iframe
-          src={drivePreviewUrl(video.driveId)}
-          title={`Vídeo: ${video.title}`}
-          allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-          allowFullScreen
-          onLoad={() => setLoaded(true)}
-          className={cn(
-            "absolute inset-0 h-full w-full border-0 transition-opacity duration-500",
-            loaded ? "opacity-100" : "opacity-0",
-          )}
-        />
       </div>
 
       {access === "restricted" ? (
