@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CategoryTile, PosterCard } from "@/components/cards/cards";
-import { CategoryIcon } from "@/components/icons";
+import { CategoryTile, VideoCard } from "@/components/cards/cards";
+import { Cover } from "@/components/cards/cover";
 import { MetaChip, PageHeader } from "@/components/page-header";
 import { Rail } from "@/components/rail";
 import { railItem } from "@/components/rail-items";
-import { categories, getCategory, videosInCategory } from "@/lib/catalog";
+import { categories, getCategory, getVideo, videosInCategory } from "@/lib/catalog";
 import { pluralize } from "@/lib/utils";
 
 export const dynamicParams = false;
@@ -26,6 +26,7 @@ export default async function CategoryPage({ params }: PageProps<"/categoria/[sl
   const category = getCategory(slug);
   if (!category) notFound();
   const videos = videosInCategory(category.id);
+  const cover = getVideo(category.coverVideo);
 
   return (
     <>
@@ -33,20 +34,19 @@ export default async function CategoryPage({ params }: PageProps<"/categoria/[sl
         eyebrow={`Tema ${String(category.driveFolder.order).padStart(2, "0")}`}
         title={category.title}
         description={category.description}
-        accent={category.color}
-        icon={<CategoryIcon icon={category.icon} size={340} strokeWidth={0.6} />}
+        media={cover && <Cover video={cover} shape="landscape" priority sizes="(min-width: 768px) 58vw, 100vw" />}
         meta={<MetaChip>{pluralize(videos.length, "vídeo", "vídeos")}</MetaChip>}
       />
       <section aria-label={`Vídeos de ${category.title}`} className="shell">
-        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
-          {videos.map((v) => (
+        <ul className="grid gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {videos.map((v, i) => (
             <li key={v.id}>
-              <PosterCard video={v} />
+              <VideoCard video={v} priority={i < 4} />
             </li>
           ))}
         </ul>
       </section>
-      <div className="mt-12">
+      <div className="mt-10">
         <Rail title="Outros temas" href="/explorar" itemClassName={railItem.category}>
           {categories
             .filter((c) => c.id !== category.id)

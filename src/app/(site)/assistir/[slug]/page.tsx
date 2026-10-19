@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PosterCard } from "@/components/cards/cards";
+import { VideoCard } from "@/components/cards/cards";
 import { Rail } from "@/components/rail";
 import { railItem } from "@/components/rail-items";
 import { WatchView } from "@/components/watch/watch-view";
-import { allVideos, getCategory, getSeries, getVideoBySlug, relatedVideos, videosInCategory } from "@/lib/catalog";
+import {
+  allVideos,
+  getCategory,
+  getSeries,
+  getVideoBySlug,
+  relatedVideos,
+  videosInCategory,
+  videosInSeries,
+} from "@/lib/catalog";
 import { site } from "@/data/site";
 
 export const dynamicParams = false;
@@ -32,28 +40,28 @@ export default async function WatchPage({ params }: PageProps<"/assistir/[slug]"
   if (!video) notFound();
 
   const category = getCategory(video.category)!;
-  const related = relatedVideos(video, 5);
-  const more = videosInCategory(video.category).filter((v) => v.id !== video.id);
+  const series = video.series ? getSeries(video.series) ?? null : null;
+  const episode = series ? videosInSeries(series.id).findIndex((v) => v.id === video.id) + 1 : null;
+  const related = relatedVideos(video, 6);
+  const next = related[0] ?? null;
+  const upNext = related.slice(1, 5);
+  const shown = new Set([video.id, ...related.slice(0, 5).map((v) => v.id)]);
+  const more = videosInCategory(video.category).filter((v) => !shown.has(v.id));
+  const moreRail = more.length >= 2 ? more : videosInCategory(video.category).filter((v) => v.id !== video.id);
 
   return (
     <>
-      <WatchView
-        video={video}
-        category={category}
-        series={video.series ? getSeries(video.series) ?? null : null}
-        related={related}
-        next={related[0] ?? null}
-      />
-      {more.length > 0 && (
-        <div className="mt-6 border-t border-white/[0.06] pt-6">
+      <WatchView video={video} category={category} series={series} episode={episode || null} upNext={upNext} next={next} />
+      {moreRail.length > 0 && (
+        <div className="mt-4 border-t border-white/[0.05] pt-4">
           <Rail
             eyebrow={category.title}
             title={`Mais vídeos de ${category.shortTitle.toLowerCase()}`}
             href={`/categoria/${category.id}`}
-            itemClassName={railItem.poster}
+            itemClassName={railItem.landscape}
           >
-            {more.map((v) => (
-              <PosterCard key={v.id} video={v} />
+            {moreRail.map((v) => (
+              <VideoCard key={v.id} video={v} />
             ))}
           </Rail>
         </div>

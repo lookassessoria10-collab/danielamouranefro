@@ -17,6 +17,8 @@ export type DiscoveryPath = {
   id: string;
   label: string;
   icon: "signal" | "cup" | "pill" | "shield";
+  /** Vídeo cujo quadro ilustra a opção. */
+  coverVideo: string;
   prompt: string;
   topics: DiscoveryTopic[];
 };
@@ -31,6 +33,7 @@ export const discoveryPaths: DiscoveryPath[] = [
     id: "sinais",
     label: "Quero entender um sinal do meu corpo.",
     icon: "signal",
+    coverVideo: "v07",
     prompt: "Qual destes assuntos despertou sua curiosidade?",
     topics: [
       { id: "espuma", label: "Espuma na urina", selection: ["v07", "v04", "v20"] },
@@ -43,6 +46,7 @@ export const discoveryPaths: DiscoveryPath[] = [
     id: "bebidas",
     label: "Tenho dúvidas sobre bebidas e alimentação.",
     icon: "cup",
+    coverVideo: "v26",
     prompt: "Sobre qual assunto você quer aprender?",
     topics: [
       { id: "alcalina", label: "Água alcalina", selection: ["v03", "v05", "v06"] },
@@ -57,6 +61,7 @@ export const discoveryPaths: DiscoveryPath[] = [
     id: "medicamentos",
     label: "Quero saber mais sobre medicamentos.",
     icon: "pill",
+    coverVideo: "v17",
     prompt: "Qual tema chamou sua atenção?",
     topics: [
       { id: "caneta", label: "Canetas emagrecedoras", selection: ["v17", "v27", "v23"] },
@@ -70,6 +75,7 @@ export const discoveryPaths: DiscoveryPath[] = [
     id: "cuidar",
     label: "Quero cuidar melhor dos meus rins.",
     icon: "shield",
+    coverVideo: "v20",
     prompt: "Por onde você quer começar?",
     topics: [
       { id: "checkup", label: "Check-up e exames", selection: ["v20", "v19", "v04"] },

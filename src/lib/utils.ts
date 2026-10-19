@@ -15,3 +15,19 @@ export function relativeDay(timestamp: number, now = Date.now()) {
 
 export const pluralize = (count: number, singular: string, plural: string) =>
   `${count} ${count === 1 ? singular : plural}`;
+
+/** Duração real no formato de player (0:41, 1:08). */
+export function formatDuration(seconds: number | null) {
+  if (seconds == null) return null;
+  const m = Math.floor(seconds / 60);
+  return `${m}:${String(seconds % 60).padStart(2, "0")}`;
+}
+
+/** Duração por extenso, para leitores de tela e textos. */
+export function durationText(seconds: number | null) {
+  if (seconds == null) return null;
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  if (m === 0) return `${s} segundos`;
+  return s ? `${m} min ${s} s` : `${m} min`;
+}

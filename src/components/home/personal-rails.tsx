@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo } from "react";
-import { PosterCard } from "@/components/cards/cards";
+import { VideoCard } from "@/components/cards/cards";
 import { ProfileBadge } from "@/components/profile-badge";
 import { Rail } from "@/components/rail";
 import { railItem } from "@/components/rail-items";
@@ -24,12 +24,13 @@ export function ProfileNote({ profile }: { profile: ProfileId }) {
   const p = getProfile(profile);
   return (
     <div className="shell">
-      <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl bg-charcoal/70 px-4 py-3 text-sm text-mist ring-1 ring-white/[0.06]">
-        <ProfileBadge id={profile} size={28} />
+      <p className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm text-fog">
+        <ProfileBadge id={profile} size={24} />
         <span>
-          Navegando como <strong className="font-medium text-snow">{p.label}</strong>. {p.note}
+          Navegando como <strong className="font-semibold text-mist">{p.label}</strong>
+          <span className="hidden sm:inline"> — {p.note}</span>
         </span>
-        <Link href="/perfis" className="ml-auto text-snow underline decoration-white/25 underline-offset-4 hover:decoration-caramel">
+        <Link href="/perfis" className="font-semibold text-mist underline decoration-white/20 underline-offset-4 hover:text-snow hover:decoration-orange">
           Trocar perfil
         </Link>
       </p>
@@ -37,22 +38,29 @@ export function ProfileNote({ profile }: { profile: ProfileId }) {
   );
 }
 
-export function ForYouRail({ profile }: { profile: ProfileId }) {
+/**
+ * "Selecionados para você": regras transparentes (perfil + escolhas + histórico).
+ * `avoid` tira da fileira os vídeos do trilho seguinte, para não repetir conteúdo lado a lado.
+ */
+export function ForYouRail({ profile, avoid = [] }: { profile: ProfileId; avoid?: string[] }) {
   const lib = useLibrary();
   const personalized = lib.ready && (lib.interests.length > 0 || lib.history.length > 0);
-  const videos = useMemo(
-    () =>
-      recommendForYou({
+  const videos = useMemo(() => {
+    const ranked = recommendForYou(
+      {
         profile,
         interests: lib.interests,
         history: lib.history.map((h) => h.id),
         watched: lib.watched,
-      }),
-    [profile, lib.interests, lib.history, lib.watched],
-  );
+      },
+      30,
+    );
+    return ranked.filter((v) => !avoid.includes(v.id)).slice(0, 10);
+  }, [profile, lib.interests, lib.history, lib.watched, avoid]);
 
   return (
     <Rail
+      key={videos.map((v) => v.id).join(",")}
       eyebrow="Para você"
       title="Selecionados para você"
       description={
@@ -60,29 +68,33 @@ export function ForYouRail({ profile }: { profile: ProfileId }) {
           ? `Pelo perfil ${getProfile(profile).label} e pelos assuntos que você escolheu ou abriu.`
           : `Pelo perfil ${getProfile(profile).label}. Use “Por onde começar?” para afinar as sugestões.`
       }
-      itemClassName={railItem.poster}
+      itemClassName={railItem.landscape}
     >
-      {videos.map((v) => (
-        <PosterCard key={v.id} video={v} />
+      {videos.map((v, i) => (
+        <VideoCard key={v.id} video={v} priority={i < 2} />
       ))}
     </Rail>
   );
 }
 
-export function RecentRail() {
+/**
+ * Vídeos abertos recentemente neste aparelho. O player do Google Drive não informa
+ * o tempo assistido, então não há barra de progresso: só o atalho para voltar ao vídeo.
+ */
+export function ContinueRail() {
   const { ready, history } = useLibrary();
   if (!ready || history.length === 0) return null;
   const videos = getVideos(history.map((h) => h.id)).slice(0, 12);
   return (
     <Rail
-      title="Vistos recentemente"
-      description="Vídeos que você abriu neste navegador."
+      title="Continuar assistindo"
+      description="Os últimos vídeos que você abriu neste aparelho."
       href="/minha-lista#vistos"
       hrefLabel="Histórico"
-      itemClassName={railItem.poster}
+      itemClassName={railItem.landscape}
     >
       {videos.map((v) => (
-        <PosterCard key={v.id} video={v} />
+        <VideoCard key={v.id} video={v} />
       ))}
     </Rail>
   );

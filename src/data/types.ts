@@ -24,6 +24,19 @@ export type SeriesId = "cafezinho-com-a-nefro";
 
 export type ProfileId = "paciente" | "residente" | "curioso";
 
+/** Fotografias reais da Dra. Daniela disponíveis em src/assets/daniela. */
+export type PhotoKey = "modelo-renal" | "consultorio" | "retrato" | "verde" | "sorriso";
+
+/**
+ * Capa do vídeo no catálogo.
+ * - "frame": quadro real do próprio vídeo (public/frames/<id>.jpg, baixado do Drive).
+ * - "type": capa tipográfica do Nefroflix com uma fotografia real da Dra. Daniela,
+ *   usada quando o quadro do vídeo não funciona como capa (texto por cima, desfoque…).
+ */
+export type VideoCover =
+  | { style: "frame"; /** Altura do centro do rosto no quadro, em % (0 = topo, 100 = base). */ faceY: number }
+  | { style: "type"; photo: PhotoKey };
+
 export type Video = {
   /** Identificador interno estável. Nunca muda, mesmo que o título mude. */
   id: string;
@@ -60,18 +73,22 @@ export type Video = {
   publishedAt: string | null;
   /** Duração real em segundos, quando conhecida. Nunca estimar. */
   durationSeconds: number | null;
+  /** Capa usada nos cards. */
+  cover: VideoCover;
   /** Relações editoriais definidas manualmente (IDs internos). */
   related: string[];
 };
 
 export type Category = {
   id: CategoryId;
+  /** Vídeo cujo quadro ilustra a categoria. */
+  coverVideo: string;
   /** Ordem e nome da pasta original no Drive. */
   driveFolder: { order: number; name: string; id: string };
   title: string;
   shortTitle: string;
   description: string;
-  /** Cor de apoio da categoria (hex). */
+  /** Tom de apoio (sempre da paleta quente do Nefroflix, nunca saturado por categoria). */
   color: string;
   icon: "kidney" | "droplet" | "cup" | "sun-moon" | "pill";
 };
@@ -83,10 +100,13 @@ export type Collection = {
   description: string;
   /** Ordem editorial explícita. Vídeos da coleção que não estiverem aqui vão para o fim. */
   order?: string[];
+  /** Capa: fotografia real da Dra. Daniela; sem ela, a capa usa quadros dos vídeos. */
+  photo?: PhotoKey;
 };
 
 export type Series = {
   id: SeriesId;
   title: string;
   description: string;
+  photo: PhotoKey;
 };

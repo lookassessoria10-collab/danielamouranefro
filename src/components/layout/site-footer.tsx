@@ -11,7 +11,7 @@ export function SiteFooter() {
       <div className="shell grid gap-12 py-14 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="max-w-sm">
           <Logo />
-          <p className="mt-4 font-display text-2xl leading-snug text-snow">{site.tagline}</p>
+          <p className="mt-4 font-extrabold tracking-[-0.03em] text-2xl leading-snug text-snow">{site.tagline}</p>
           <p className="mt-3 text-sm leading-relaxed text-fog">
             Vídeos educativos com a {site.doctor.name}, {site.doctor.specialty.toLowerCase()}.
           </p>
@@ -22,7 +22,7 @@ export function SiteFooter() {
                   href={site.links.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/12 px-4 py-2 text-sm text-snow hover:border-caramel/60"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/12 px-4 py-2 text-sm text-snow hover:border-orange/60"
                 >
                   <InstagramIcon size={16} /> {site.links.instagramHandle || "Instagram"}
                 </a>
@@ -32,7 +32,7 @@ export function SiteFooter() {
                   href={site.links.contact}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full bg-caramel px-4 py-2 text-sm font-medium text-ink hover:bg-caramel-soft"
+                  className="inline-flex items-center gap-2 rounded-full bg-orange px-4 py-2 text-sm font-medium text-ink hover:bg-orange-bright"
                 >
                   {site.links.contactLabel} <ArrowUpRight size={15} aria-hidden />
                 </a>
@@ -65,7 +65,7 @@ export function SiteFooter() {
       </div>
 
       <div className="shell pb-[calc(5.5rem_+_env(safe-area-inset-bottom))] md:pb-10">
-        <p className="rounded-2xl border border-white/[0.06] bg-charcoal/60 px-5 py-4 text-sm leading-relaxed text-mist">
+        <p className="rounded-2xl border border-white/[0.06] bg-surface/60 px-5 py-4 text-sm leading-relaxed text-mist">
           {site.disclaimer}
         </p>
         <p className="mt-6 text-xs text-fog">

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { CategoryTile, CollectionCard, FeatureCard } from "@/components/cards/cards";
+import { CategoryTile, CollectionCard } from "@/components/cards/cards";
 import { AllVideos } from "@/components/explore/all-videos";
+import { FeatureBanner } from "@/components/home/feature-banner";
 import { SeriesSpotlight } from "@/components/home/series-spotlight";
 import { MetaChip, PageHeader } from "@/components/page-header";
+import { banners } from "@/data/profiles";
 import { allVideos, categories, collections, seriesList, videosInCategory, videosInCollection } from "@/lib/catalog";
-import { photos } from "@/lib/photos";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -18,11 +19,7 @@ export default function ExplorePage() {
     <>
       <PageHeader
         eyebrow="Explorar"
-        title={
-          <>
-            Todo o acervo, <em className="text-caramel-soft">por temas.</em>
-          </>
-        }
+        title="Todo o acervo, por temas."
         description="Os cinco temas seguem a organização original dos vídeos. As coleções e o quadro reúnem os mesmos vídeos por outros caminhos."
         meta={
           <>
@@ -44,12 +41,12 @@ export default function ExplorePage() {
         </ul>
       </section>
 
-      <section id="colecoes" aria-labelledby="colecoes-titulo" className="reveal shell scroll-mt-24 py-14">
-        <h2 id="colecoes-titulo" className="text-[1.6rem] font-semibold tracking-[-0.02em] text-snow">
+      <section id="colecoes" aria-labelledby="colecoes-titulo" className="reveal shell scroll-mt-24 py-12">
+        <p className="eyebrow text-orange-bright">Para maratonar</p>
+        <h2 id="colecoes-titulo" className="mt-1 text-[1.5rem] font-extrabold tracking-[-0.025em] text-snow">
           Coleções
         </h2>
-        <p className="mt-1 text-sm text-fog">Seleções editoriais com vídeos do acervo — nenhum arquivo duplicado.</p>
-        <ul className="mt-6 grid grid-cols-1 gap-6 min-[440px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+        <ul className="mt-5 grid grid-cols-1 gap-4 min-[440px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           {collections.map((c) => (
             <li key={c.id} className="xl:col-span-2">
               <CollectionCard collection={c} videos={videosInCollection(c.id)} />
@@ -58,18 +55,7 @@ export default function ExplorePage() {
         </ul>
       </section>
 
-      <div className="shell py-4">
-        <FeatureCard
-          eyebrow="Não sabe por onde começar?"
-          title="Conte o que você quer entender."
-          description="Duas escolhas rápidas e o Nefroflix monta uma seleção de vídeos sobre o assunto que despertou sua curiosidade."
-          href="/por-onde-comecar"
-          cta="Começar agora"
-          photo={photos.consultorio}
-          photoPosition="50% 26%"
-        />
-      </div>
-
+      <FeatureBanner banner={banners.selecao} photo="consultorio" />
       <SeriesSpotlight />
       <AllVideos />
     </>

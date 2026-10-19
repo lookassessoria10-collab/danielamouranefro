@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Bookmark, History, Sparkles, X } from "lucide-react";
-import { CompactCard, PosterCard } from "@/components/cards/cards";
+import { CompactCard, VideoCard } from "@/components/cards/cards";
 import { getVideo, getVideos } from "@/lib/catalog";
 import { library, useLibrary } from "@/lib/library";
 import { toast } from "@/lib/toast";
@@ -17,25 +17,25 @@ export function MyListView() {
 
   return (
     <div className="shell pb-10 pt-24 md:pt-32">
-      <p className="text-[0.72rem] font-medium uppercase tracking-[0.22em] text-caramel">Neste navegador</p>
-      <h1 className="mt-3 font-display text-[3rem] leading-[0.95] text-snow sm:text-[4.4rem]">Minha lista</h1>
+      <p className="eyebrow text-orange-bright">Neste aparelho</p>
+      <h1 className="mt-2 text-display text-[2.6rem] text-snow sm:text-[3.6rem]">Minha lista</h1>
       <p className="mt-4 max-w-xl text-mist">
         Sem conta e sem cadastro: sua lista e seu histórico ficam salvos apenas neste aparelho.
       </p>
 
       {/* Minha lista */}
       <section aria-labelledby="salvos" className="mt-12">
-        <h2 id="salvos" className="flex items-center gap-2 text-[1.35rem] font-semibold text-snow">
-          <Bookmark size={20} aria-hidden className="text-caramel" /> Salvos para assistir
-          {lib.ready && <span className="font-display text-2xl font-normal text-fog">{saved.length}</span>}
+        <h2 id="salvos" className="flex items-center gap-2 text-[1.3rem] font-extrabold tracking-[-0.02em] text-snow">
+          <Bookmark size={20} aria-hidden className="text-orange" /> Salvos para assistir
+          {lib.ready && <span className="font-semibold text-fog">{saved.length}</span>}
         </h2>
         {!lib.ready ? (
           <SkeletonGrid />
         ) : saved.length > 0 ? (
-          <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
+          <ul className="mt-5 grid gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {saved.map((v) => (
               <li key={v.id}>
-                <PosterCard video={v} />
+                <VideoCard video={v} />
               </li>
             ))}
           </ul>
@@ -51,8 +51,8 @@ export function MyListView() {
       {/* Histórico */}
       <section id="vistos" aria-labelledby="vistos-titulo" className="mt-16 scroll-mt-24">
         <div className="flex flex-wrap items-center gap-3">
-          <h2 id="vistos-titulo" className="flex items-center gap-2 text-[1.35rem] font-semibold text-snow">
-            <History size={20} aria-hidden className="text-frost" /> Vistos recentemente
+          <h2 id="vistos-titulo" className="flex items-center gap-2 text-[1.3rem] font-extrabold tracking-[-0.02em] text-snow">
+            <History size={20} aria-hidden className="text-orange-bright" /> Vistos recentemente
           </h2>
           {lib.ready && lib.history.length > 0 && (
             <div className="ml-auto flex items-center gap-2">
@@ -100,15 +100,15 @@ export function MyListView() {
             })}
           </ul>
         ) : (
-          lib.ready && <p className="mt-4 rounded-2xl bg-charcoal px-5 py-4 text-sm text-mist ring-1 ring-white/[0.06]">Nenhum vídeo aberto ainda.</p>
+          lib.ready && <p className="mt-4 rounded-2xl bg-surface px-5 py-4 text-sm text-mist ring-1 ring-white/[0.06]">Nenhum vídeo aberto ainda.</p>
         )}
       </section>
 
       {/* Assistidos */}
       {lib.ready && watched.length > 0 && (
         <section aria-labelledby="assistidos" className="mt-16">
-          <h2 id="assistidos" className="text-[1.35rem] font-semibold text-snow">
-            Marcados como assistidos <span className="font-display text-2xl font-normal text-fog">{watched.length}</span>
+          <h2 id="assistidos" className="text-[1.3rem] font-extrabold tracking-[-0.02em] text-snow">
+            Marcados como assistidos <span className="font-semibold text-fog">{watched.length}</span>
           </h2>
           <ul className="mt-4 grid gap-x-6 gap-y-1 md:grid-cols-2">
             {watched.map((v) => (
@@ -140,14 +140,14 @@ export function MyListView() {
 
 function EmptyState({ title, text, cta }: { title: string; text: string; cta: { href: string; label: string } }) {
   return (
-    <div className="mt-5 flex flex-col items-start gap-4 rounded-3xl bg-charcoal p-6 ring-1 ring-white/[0.06] sm:flex-row sm:items-center sm:p-8">
+    <div className="mt-5 flex flex-col items-start gap-4 rounded-3xl bg-surface p-6 ring-1 ring-white/[0.06] sm:flex-row sm:items-center sm:p-8">
       <div className="flex-1">
         <p className="text-lg font-semibold text-snow">{title}</p>
         <p className="mt-1 text-mist">{text}</p>
       </div>
       <Link
         href={cta.href}
-        className="inline-flex h-12 items-center gap-2 rounded-full bg-caramel px-6 font-semibold text-ink hover:bg-caramel-soft"
+        className="inline-flex h-12 items-center gap-2 rounded-full bg-orange px-6 font-semibold text-ink hover:bg-orange-bright"
       >
         <Sparkles size={18} aria-hidden /> {cta.label}
       </Link>
@@ -157,9 +157,9 @@ function EmptyState({ title, text, cta }: { title: string; text: string; cta: { 
 
 function SkeletonGrid() {
   return (
-    <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5" aria-hidden>
+    <ul className="mt-5 grid gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" aria-hidden>
       {Array.from({ length: 4 }).map((_, i) => (
-        <li key={i} className="skeleton aspect-[3/4] rounded-2xl" />
+        <li key={i} className="skeleton aspect-video rounded-xl" />
       ))}
     </ul>
   );

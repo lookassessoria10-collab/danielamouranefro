@@ -20,7 +20,7 @@ export function ProfileBadge({ id, className, size = 32 }: { id: ProfileId; clas
         width: size,
         height: size,
         color: profile.color,
-        background: `color-mix(in oklab, ${profile.color} 16%, var(--color-charcoal))`,
+        background: `color-mix(in oklab, ${profile.color} 16%, var(--color-surface))`,
         boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${profile.color} 40%, transparent)`,
       }}
     >

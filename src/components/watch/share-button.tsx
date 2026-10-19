@@ -52,7 +52,7 @@ export function ShareButton({ path, title, text }: { path: string; title: string
         type="button"
         onClick={onShare}
         aria-expanded={open}
-        className="inline-flex h-12 items-center gap-2 rounded-full border border-white/20 bg-white/[0.04] px-5 text-[0.95rem] font-medium text-snow transition-colors hover:border-white/40 hover:bg-white/[0.08]"
+        className="inline-flex h-12 items-center gap-2 rounded-full bg-snow/[0.12] px-5 text-[0.95rem] font-semibold text-snow backdrop-blur-md transition-colors hover:bg-snow/20"
       >
         <Share2 size={18} aria-hidden /> Compartilhar
       </button>
@@ -63,7 +63,7 @@ export function ShareButton({ path, title, text }: { path: string; title: string
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 4 }}
             transition={{ duration: 0.18 }}
-            className="absolute left-0 top-full z-30 mt-2 w-60 rounded-2xl border border-white/10 bg-charcoal-2 p-1.5 shadow-lift"
+            className="absolute left-0 top-full z-30 mt-2 w-60 rounded-2xl border border-white/10 bg-raised p-1.5 shadow-lift"
           >
             <button
               type="button"

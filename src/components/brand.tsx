@@ -1,28 +1,29 @@
-import { KIDNEY_PATH } from "./icons";
+import Image from "next/image";
+import logoDark from "@/assets/brand/nefroflix-logo-dark.png";
+import logoLight from "@/assets/brand/nefroflix-logo.png";
 import { cn } from "@/lib/utils";
 
-/** Símbolo: rim com um "play" recortado — perguntas que viram vídeo. */
-export function LogoMark({ size = 28, className }: { size?: number; className?: string }) {
+/**
+ * Logotipo oficial do Nefroflix (arquivo enviado pela equipe).
+ * - "dark": versão negativa para fundos escuros (só o "Nefro" fica creme).
+ * - "light": cores originais, para fundos claros.
+ */
+export function Logo({
+  tone = "dark",
+  className,
+  priority = false,
+}: {
+  tone?: "dark" | "light";
+  className?: string;
+  priority?: boolean;
+}) {
   return (
-    <svg width={size} height={size} viewBox="3.5 2 15 19.5" aria-hidden className={className}>
-      <path d={KIDNEY_PATH} fill="var(--color-copper)" />
-      <path d="M8.3 8.9 13.4 12l-5.1 3.1Z" fill="var(--color-ink)" />
-    </svg>
-  );
-}
-
-export function Logo({ className, size = "md" }: { className?: string; size?: "md" | "lg" }) {
-  return (
-    <span className={cn("inline-flex items-center gap-2", className)}>
-      <LogoMark size={size === "lg" ? 34 : 24} />
-      <span
-        className={cn(
-          "font-semibold tracking-[-0.045em] text-snow",
-          size === "lg" ? "text-[1.9rem]" : "text-[1.3rem]",
-        )}
-      >
-        nefro<span className="text-caramel">flix</span>
-      </span>
-    </span>
+    <Image
+      src={tone === "dark" ? logoDark : logoLight}
+      alt="Nefroflix"
+      priority={priority}
+      sizes="(min-width: 768px) 180px, 140px"
+      className={cn("h-7 w-auto select-none md:h-8", className)}
+    />
   );
 }

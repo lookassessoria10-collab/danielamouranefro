@@ -33,7 +33,7 @@ export function MobileNav() {
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   "flex h-[60px] flex-col items-center justify-center gap-1 text-[0.68rem] transition-colors",
-                  active ? "text-caramel" : "text-fog active:text-snow",
+                  active ? "text-orange" : "text-fog active:text-snow",
                 )}
               >
                 <Icon size={21} strokeWidth={active ? 2.1 : 1.7} aria-hidden />

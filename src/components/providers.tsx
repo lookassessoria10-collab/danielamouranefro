@@ -29,9 +29,9 @@ function Toaster() {
             initial={{ opacity: 0, y: 16, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.98 }}
-            className="flex items-center gap-2.5 rounded-full border border-white/10 bg-charcoal-3/95 px-4 py-2.5 text-sm text-snow shadow-lift backdrop-blur"
+            className="flex items-center gap-2.5 rounded-full border border-white/10 bg-raised-2/95 px-4 py-2.5 text-sm text-snow shadow-lift backdrop-blur"
           >
-            <span className="grid size-5 place-items-center rounded-full bg-caramel text-ink">
+            <span className="grid size-5 place-items-center rounded-full bg-orange text-ink">
               <Check size={13} strokeWidth={3} aria-hidden />
             </span>
             {t.message}

@@ -56,11 +56,11 @@ export function Rail({ title, eyebrow, description, href, hrefLabel = "Ver tudo"
   };
 
   return (
-    <section aria-labelledby={headingId} className={cn("reveal py-6 md:py-8", className)}>
+    <section aria-labelledby={headingId} className={cn("group/rail reveal py-4 md:py-6", className)}>
       <div className="shell flex items-end gap-4">
         <div className="min-w-0">
-          {eyebrow && <p className="mb-1.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-caramel">{eyebrow}</p>}
-          <h2 id={headingId} className="text-[1.35rem] font-semibold tracking-[-0.02em] text-snow sm:text-[1.6rem]">
+          {eyebrow && <p className="eyebrow mb-1 text-[0.64rem] text-orange-bright">{eyebrow}</p>}
+          <h2 id={headingId} className="text-[1.25rem] font-extrabold tracking-[-0.025em] text-snow sm:text-[1.5rem]">
             {title}
           </h2>
           {description && <p className="mt-1 max-w-xl text-sm text-fog">{description}</p>}
@@ -69,13 +69,13 @@ export function Rail({ title, eyebrow, description, href, hrefLabel = "Ver tudo"
           {href && (
             <Link
               href={href}
-              className="group inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-sm text-mist transition-colors hover:text-snow"
+              className="group inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-sm font-semibold text-mist transition-colors hover:text-snow"
             >
               {hrefLabel}
               <ArrowRight size={15} aria-hidden className="transition-transform group-hover:translate-x-0.5" />
             </Link>
           )}
-          <div className="hidden gap-1.5 md:flex">
+          <div className="hidden gap-1.5 opacity-60 transition-opacity duration-300 group-hover/rail:opacity-100 group-focus-within/rail:opacity-100 md:flex">
             <RailButton label={`Voltar em ${title}`} disabled={edges.start} onClick={() => page(-1)}>
               <ChevronLeft size={19} aria-hidden />
             </RailButton>
@@ -88,7 +88,7 @@ export function Rail({ title, eyebrow, description, href, hrefLabel = "Ver tudo"
 
       <ul
         ref={scroller}
-        className="rail-pad no-scrollbar mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain py-3 sm:gap-4"
+        className="rail-pad no-scrollbar mt-1 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain py-4 sm:gap-4"
       >
         {Children.map(children, (child) =>
           child ? <li className={cn("shrink-0 snap-start", itemClassName)}>{child}</li> : null,
@@ -115,7 +115,7 @@ function RailButton({
       aria-label={label}
       disabled={disabled}
       onClick={onClick}
-      className="grid size-9 place-items-center rounded-full border border-white/12 text-snow transition-[opacity,background-color,border-color] hover:border-white/30 hover:bg-white/[0.06] disabled:opacity-30 disabled:hover:bg-transparent"
+      className="grid size-9 place-items-center rounded-full bg-white/[0.07] text-snow transition-[opacity,background-color] hover:bg-white/[0.16] disabled:opacity-30 disabled:hover:bg-white/[0.07]"
     >
       {children}
     </button>

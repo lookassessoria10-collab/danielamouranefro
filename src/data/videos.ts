@@ -6,12 +6,17 @@ import type { Video } from "./types";
  * Fonte: pasta "DANIELA REELS" no Google Drive (5 subpastas, 27 vídeos).
  * Os IDs do Drive e os nomes de arquivo foram conferidos nas pastas originais.
  * Todos os 27 arquivos são verticais (9:16), conferidos pelas miniaturas do Drive.
+ * Capas: quadros reais dos vídeos em public/frames (scripts/fetch-frames.mjs).
+ * v02 e v04 usam capa tipográfica: o quadro tem texto por cima, desfoque ou fica escuro.
+ * Conferido nos quadros: v02 traz a pergunta "Tenho cisto renal, devo me preocupar?" (#SBN responde)
+ * e v04 trata de "albuminúria ou proteinúria".
  *
  * Regras editoriais:
  * - Os títulos podem ser adaptados, mas o assunto é sempre o do nome do arquivo.
  * - `question` é um caminho para o assunto, nunca uma resposta médica.
  * - `summary` só deve ser preenchido depois de assistir ao vídeo e validar o texto.
  * - `durationSeconds` e `publishedAt` só com dados reais. Nunca estimar.
+ *   As durações foram lidas do próprio player do Drive, tocando cada vídeo no site (19/10/2026).
  *
  * Para cadastrar um novo vídeo, copie um bloco, gere um `id` novo (ex.: "v28")
  * e rode `npm run check:catalog` para validar o arquivo.
@@ -44,9 +49,11 @@ export const videos: Video[] = [
     category: "entenda-seus-rins",
     tags: ["cisto", "cisto renal", "rins"],
     keywords: ["cisto no rim", "cistos", "rim"],
-    question: "O que é um cisto no rim?",
+    question: "Tenho cisto renal, devo me preocupar?",
     collections: [],
     featured: 4,
+    durationSeconds: 68,
+    cover: { style: "type", photo: "consultorio" },
     related: ["v20", "v19", "v04"],
   }),
   video({
@@ -57,11 +64,13 @@ export const videos: Video[] = [
     fileName: "4 - sbn albumina vid.mp4",
     title: "Albumina",
     category: "entenda-seus-rins",
-    tags: ["albumina", "exames", "rins"],
-    keywords: ["proteína", "exame"],
+    tags: ["albumina", "albuminúria", "exames", "rins"],
+    keywords: ["albuminúria", "proteinúria", "proteína", "urina", "exame"],
     question: "O que a albumina tem a ver com os rins?",
     collections: ["comece-por-aqui"],
     featured: 6,
+    durationSeconds: 74,
+    cover: { style: "type", photo: "retrato" },
     related: ["v07", "v20", "v19"],
   }),
   video({
@@ -77,6 +86,8 @@ export const videos: Video[] = [
     question: "Por que minha urina faz espuma?",
     collections: ["comece-por-aqui", "perguntas-frequentes", "sinais-do-corpo"],
     featured: 10,
+    durationSeconds: 41,
+    cover: { style: "frame", faceY: 38 },
     related: ["v04", "v20", "v19"],
   }),
   video({
@@ -92,6 +103,8 @@ export const videos: Video[] = [
     question: "O rosto pode dar sinais sobre os rins?",
     collections: ["sinais-do-corpo"],
     featured: 7,
+    durationSeconds: 36,
+    cover: { style: "frame", faceY: 40 },
     related: ["v07", "v20", "v19"],
   }),
   video({
@@ -107,6 +120,8 @@ export const videos: Video[] = [
     question: "O que significa a função renal cair?",
     collections: ["comece-por-aqui", "sinais-do-corpo"],
     featured: 8,
+    durationSeconds: 28,
+    cover: { style: "frame", faceY: 40 },
     related: ["v20", "v04", "v07"],
   }),
   video({
@@ -122,6 +137,8 @@ export const videos: Video[] = [
     question: "Quando fazer um check-up renal?",
     collections: ["comece-por-aqui", "perguntas-frequentes"],
     featured: 10,
+    durationSeconds: 52,
+    cover: { style: "frame", faceY: 38 },
     related: ["v19", "v04", "v07"],
   }),
 
@@ -140,6 +157,8 @@ export const videos: Video[] = [
     collections: ["comece-por-aqui", "tudo-sobre-agua"],
     series: "cafezinho-com-a-nefro",
     featured: 8,
+    durationSeconds: 33,
+    cover: { style: "frame", faceY: 37 },
     related: ["v03", "v05", "v06"],
   }),
   video({
@@ -155,6 +174,8 @@ export const videos: Video[] = [
     question: "Água alcalina realmente faz diferença?",
     collections: ["perguntas-frequentes", "tudo-sobre-agua"],
     featured: 9,
+    durationSeconds: 47,
+    cover: { style: "frame", faceY: 38 },
     related: ["v05", "v06", "v01"],
   }),
   video({
@@ -171,6 +192,8 @@ export const videos: Video[] = [
     collections: ["perguntas-frequentes", "tudo-sobre-agua"],
     series: "cafezinho-com-a-nefro",
     featured: 7,
+    durationSeconds: 45,
+    cover: { style: "frame", faceY: 38 },
     related: ["v03", "v06", "v01"],
   }),
   video({
@@ -187,6 +210,8 @@ export const videos: Video[] = [
     collections: ["tudo-sobre-agua"],
     series: "cafezinho-com-a-nefro",
     featured: 6,
+    durationSeconds: 31,
+    cover: { style: "frame", faceY: 39 },
     related: ["v03", "v05", "v01"],
   }),
   video({
@@ -203,6 +228,8 @@ export const videos: Video[] = [
     collections: ["tudo-sobre-agua"],
     series: "cafezinho-com-a-nefro",
     featured: 5,
+    durationSeconds: 48,
+    cover: { style: "frame", faceY: 35 },
     related: ["v22", "v03", "v05"],
   }),
   video({
@@ -219,6 +246,8 @@ export const videos: Video[] = [
     collections: ["tudo-sobre-agua"],
     series: "cafezinho-com-a-nefro",
     featured: 4,
+    durationSeconds: 22,
+    cover: { style: "frame", faceY: 40 },
     related: ["v12", "v03", "v01"],
   }),
 
@@ -236,6 +265,8 @@ export const videos: Video[] = [
     question: "O que a ressaca tem a ver com os rins?",
     collections: [],
     featured: 6,
+    durationSeconds: 26,
+    cover: { style: "frame", faceY: 32 },
     related: ["v26", "v24", "v15"],
   }),
   video({
@@ -251,6 +282,8 @@ export const videos: Video[] = [
     question: "Posso tomar chá diurético?",
     collections: ["perguntas-frequentes"],
     featured: 8,
+    durationSeconds: 37,
+    cover: { style: "frame", faceY: 30 },
     related: ["v18", "v13", "v24"],
   }),
   video({
@@ -267,6 +300,8 @@ export const videos: Video[] = [
     collections: [],
     series: "cafezinho-com-a-nefro",
     featured: 7,
+    durationSeconds: 30,
+    cover: { style: "frame", faceY: 40 },
     related: ["v26", "v13", "v15"],
   }),
   video({
@@ -283,6 +318,8 @@ export const videos: Video[] = [
     collections: [],
     series: "cafezinho-com-a-nefro",
     featured: 7,
+    durationSeconds: 30,
+    cover: { style: "frame", faceY: 40 },
     related: ["v13", "v24", "v15"],
   }),
 
@@ -301,6 +338,8 @@ export const videos: Video[] = [
     collections: ["noite-e-rotina"],
     series: "cafezinho-com-a-nefro",
     featured: 6,
+    durationSeconds: 32,
+    cover: { style: "frame", faceY: 38 },
     related: ["v16", "v14", "v11"],
   }),
   video({
@@ -316,6 +355,8 @@ export const videos: Video[] = [
     question: "O inverno muda alguma coisa para os rins?",
     collections: [],
     featured: 4,
+    durationSeconds: 43,
+    cover: { style: "frame", faceY: 34 },
     related: ["v25", "v09", "v14"],
   }),
   video({
@@ -331,6 +372,8 @@ export const videos: Video[] = [
     question: "Segurar o xixi faz mal?",
     collections: ["comece-por-aqui", "perguntas-frequentes", "noite-e-rotina"],
     featured: 8,
+    durationSeconds: 46,
+    cover: { style: "frame", faceY: 36 },
     related: ["v16", "v21", "v09"],
   }),
   video({
@@ -347,6 +390,8 @@ export const videos: Video[] = [
     collections: ["perguntas-frequentes", "sinais-do-corpo", "noite-e-rotina"],
     series: "cafezinho-com-a-nefro",
     featured: 9,
+    durationSeconds: 27,
+    cover: { style: "frame", faceY: 35 },
     related: ["v14", "v09", "v21"],
   }),
   video({
@@ -363,6 +408,8 @@ export const videos: Video[] = [
     collections: [],
     series: "cafezinho-com-a-nefro",
     featured: 6,
+    durationSeconds: 28,
+    cover: { style: "frame", faceY: 40 },
     related: ["v14", "v16", "v09"],
   }),
   video({
@@ -378,6 +425,8 @@ export const videos: Video[] = [
     question: "Projeto verão: o que considerar?",
     collections: ["emagrecimento-em-pauta"],
     featured: 6,
+    durationSeconds: 56,
+    cover: { style: "frame", faceY: 43 },
     related: ["v17", "v27", "v11"],
   }),
 
@@ -395,6 +444,8 @@ export const videos: Video[] = [
     question: "O que saber sobre a eletroestimulação?",
     collections: [],
     featured: 4,
+    durationSeconds: 45,
+    cover: { style: "frame", faceY: 37 },
     related: ["v17", "v27", "v23"],
   }),
   video({
@@ -410,6 +461,8 @@ export const videos: Video[] = [
     question: "O que considerar sobre as canetas emagrecedoras?",
     collections: ["perguntas-frequentes", "emagrecimento-em-pauta"],
     featured: 9,
+    durationSeconds: 31,
+    cover: { style: "frame", faceY: 42 },
     related: ["v27", "v23", "v18"],
   }),
   video({
@@ -425,6 +478,8 @@ export const videos: Video[] = [
     question: "O que saber sobre chás e anti-inflamatórios?",
     collections: [],
     featured: 7,
+    durationSeconds: 76,
+    cover: { style: "frame", faceY: 31 },
     related: ["v15", "v23", "v17"],
   }),
   video({
@@ -440,6 +495,8 @@ export const videos: Video[] = [
     question: "O que saber sobre a vitamina D?",
     collections: [],
     featured: 7,
+    durationSeconds: 54,
+    cover: { style: "frame", faceY: 38 },
     related: ["v18", "v17", "v27"],
   }),
   video({
@@ -455,6 +512,8 @@ export const videos: Video[] = [
     question: "Remédios para emagrecer: o que considerar?",
     collections: ["emagrecimento-em-pauta"],
     featured: 8,
+    durationSeconds: 79,
+    cover: { style: "frame", faceY: 39 },
     related: ["v17", "v25", "v23"],
   }),
 ];

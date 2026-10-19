@@ -1,41 +1,39 @@
 import { cn } from "@/lib/utils";
 
-/** Cabeçalho editorial das páginas internas. */
+/**
+ * Cabeçalho das páginas internas. `media` (quadro de vídeo ou fotografia)
+ * ocupa a lateral direita no desktop e o fundo no celular, com transição suave.
+ */
 export function PageHeader({
   eyebrow,
   title,
   description,
   meta,
-  accent,
-  icon,
+  media,
   className,
 }: {
   eyebrow: string;
   title: React.ReactNode;
   description?: string;
   meta?: React.ReactNode;
-  accent?: string;
-  icon?: React.ReactNode;
+  media?: React.ReactNode;
   className?: string;
 }) {
   return (
-    <header className={cn("relative isolate overflow-hidden pb-8 pt-28 md:pb-12 md:pt-36", className)}>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/2 -z-10 h-[460px] w-[900px] -translate-x-1/2 rounded-full blur-[130px]"
-        style={{ background: accent ? `color-mix(in oklab, ${accent} 22%, transparent)` : "rgb(21 57 74 / 0.55)" }}
-      />
-      {icon && (
-        <div aria-hidden className="pointer-events-none absolute -right-10 top-16 -z-10 opacity-[0.12] md:right-[6%]" style={{ color: accent }}>
-          {icon}
+    <header className={cn("relative isolate overflow-hidden", className)}>
+      {media ? (
+        <div aria-hidden className="absolute inset-0 -z-10 md:left-auto md:w-[58%]">
+          {media}
+          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/75 to-ink/30 md:bg-gradient-to-r md:from-ink md:via-ink/55 md:to-ink/10" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-ink to-transparent" />
         </div>
+      ) : (
+        <div aria-hidden className="pointer-events-none absolute -top-40 left-[10%] -z-10 h-[420px] w-[620px] rounded-full bg-orange/10 blur-[130px]" />
       )}
-      <div className="shell">
-        <p className="text-[0.72rem] font-medium uppercase tracking-[0.22em]" style={{ color: accent ?? "var(--color-caramel)" }}>
-          {eyebrow}
-        </p>
-        <h1 className="mt-3 max-w-4xl font-display text-[3rem] leading-[0.95] text-snow sm:text-[4.4rem] lg:text-[5.2rem]">{title}</h1>
-        {description && <p className="mt-5 max-w-2xl text-lg leading-relaxed text-mist">{description}</p>}
+      <div className={cn("shell pb-8 pt-28 md:pb-12 md:pt-36", Boolean(media) && "md:min-h-[440px] md:pt-40")}>
+        <p className="eyebrow text-orange-bright">{eyebrow}</p>
+        <h1 className="mt-3 max-w-3xl text-display text-[2.6rem] text-snow sm:text-[3.6rem] lg:text-[4.4rem]">{title}</h1>
+        {description && <p className="mt-4 max-w-xl text-[1.05rem] leading-relaxed text-mist">{description}</p>}
         {meta && <div className="mt-6 flex flex-wrap items-center gap-2">{meta}</div>}
       </div>
     </header>
@@ -43,5 +41,5 @@ export function PageHeader({
 }
 
 export function MetaChip({ children }: { children: React.ReactNode }) {
-  return <span className="rounded-full bg-white/[0.05] px-3 py-1.5 text-sm text-mist ring-1 ring-white/[0.07]">{children}</span>;
+  return <span className="rounded-full bg-white/[0.07] px-3 py-1.5 text-sm font-semibold text-mist backdrop-blur-md">{children}</span>;
 }

@@ -5,14 +5,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Logo } from "./brand";
 import { ProfileGlyph } from "./profile-badge";
 import { profiles } from "@/data/profiles";
 import { site } from "@/data/site";
 import type { ProfileId } from "@/data/types";
 import { library, useLibrary } from "@/lib/library";
-import { avatars } from "@/lib/photos";
+import { photos } from "@/lib/photos";
 import { cn } from "@/lib/utils";
 
 /**
@@ -39,81 +39,87 @@ export function ProfileSelector({ mode }: { mode: "entry" | "manage" }) {
   };
 
   const current = mode === "manage" && ready ? profile : null;
+  const photo = photos.sorriso;
 
   return (
     <main id="conteudo" className="relative isolate flex min-h-dvh flex-col overflow-hidden">
+      {/* Fotografia discreta ao fundo */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-[-30%] h-[80vh] w-[120vw] -translate-x-1/2 rounded-[50%] bg-petrol/70 blur-[120px]" />
-        <svg className="absolute left-1/2 top-1/2 h-[140vh] w-[140vh] -translate-x-1/2 -translate-y-1/2 text-white/[0.035]" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth=".15">
-          {[18, 26, 34, 42, 50].map((r) => (
-            <circle key={r} cx="50" cy="50" r={r} />
-          ))}
-        </svg>
+        <div className="absolute inset-y-0 right-0 w-full opacity-35 md:w-[52%] md:opacity-60">
+          <Image
+            src={photo.src}
+            alt=""
+            fill
+            priority
+            placeholder="blur"
+            sizes="(min-width: 768px) 52vw, 100vw"
+            className="object-cover [object-position:var(--pos-m)] md:[object-position:var(--pos)]"
+            style={{ "--pos": "50% 45%", "--pos-m": "50% 30%" } as React.CSSProperties}
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/85 to-ink md:bg-gradient-to-r md:from-ink md:via-ink/90 md:to-ink/30" />
+        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink to-transparent" />
+        <div className="absolute -left-40 top-1/3 size-[520px] rounded-full bg-orange/10 blur-[140px]" />
       </div>
 
       <header className="shell flex items-center justify-between py-5 sm:py-7">
-        <Logo />
+        <Logo priority />
         {mode === "manage" && ready && profile && (
-          <Link href={`/${profile}`} className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm text-mist hover:text-snow">
+          <Link href={`/${profile}`} className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-mist hover:text-snow">
             <ArrowLeft size={17} aria-hidden /> Voltar
           </Link>
         )}
       </header>
 
-      <section className="shell flex flex-1 flex-col items-center justify-center pb-14 pt-4 text-center">
-        <p className="rise text-[0.72rem] font-medium uppercase tracking-[0.24em] text-caramel">{site.tagline}</p>
-        <h1
-          className="rise mt-4 font-display text-[3rem] leading-[0.95] text-snow sm:text-[4.6rem] lg:text-[5.6rem]"
-          style={{ animationDelay: "60ms" }}
-        >
+      <section className="shell flex flex-1 flex-col justify-center pb-14 pt-2 md:pb-20">
+        <p className="rise eyebrow text-orange-bright">{site.tagline}</p>
+        <h1 className="rise mt-3 max-w-2xl text-display text-[2.7rem] text-snow sm:text-[4rem] lg:text-[4.8rem]" style={{ animationDelay: "60ms" }}>
           Quem está assistindo?
         </h1>
+        <p className="rise mt-4 max-w-lg text-[1.05rem] leading-relaxed text-mist" style={{ animationDelay: "120ms" }}>
+          Escolha como quer navegar. Sem cadastro e sem senha: o perfil só muda a ordem das sugestões, e todos os vídeos
+          ficam disponíveis para todos.
+        </p>
 
-        <ul className="mt-10 grid w-full max-w-[920px] gap-3 sm:mt-14 sm:grid-cols-3 sm:gap-5">
+        <ul className="mt-9 grid w-full max-w-4xl gap-3 sm:mt-12 sm:grid-cols-3 sm:gap-4">
           {profiles.map((p, i) => {
             const isChosen = chosen === p.id;
             const dimmed = chosen !== null && !isChosen;
+            const active = isChosen || current === p.id;
             return (
               <motion.li
                 key={p.id}
                 initial={false}
-                animate={{ opacity: dimmed ? 0.25 : 1, scale: isChosen ? 1.04 : dimmed ? 0.96 : 1 }}
+                animate={{ opacity: dimmed ? 0.3 : 1, scale: isChosen ? 1.03 : dimmed ? 0.97 : 1 }}
                 className="rise"
-                style={{ animationDelay: `${140 + i * 70}ms` }}
+                style={{ animationDelay: `${180 + i * 70}ms` }}
               >
                 <button
                   type="button"
                   onClick={() => choose(p.id)}
                   aria-pressed={current === p.id}
                   className={cn(
-                    "group flex w-full items-center gap-4 rounded-[26px] p-3 text-left transition-colors sm:flex-col sm:gap-5 sm:p-5 sm:text-center",
-                    "hover:bg-white/[0.035]",
+                    "group relative flex w-full items-center gap-4 overflow-hidden rounded-2xl bg-surface/80 p-4 text-left ring-1 backdrop-blur-md transition-[background-color,box-shadow,translate] duration-500 ease-out-expo",
+                    "hover:-translate-y-1 hover:bg-raised/90 sm:flex-col sm:items-start sm:gap-10 sm:p-6",
+                    active ? "ring-2 ring-orange" : "ring-white/[0.08] hover:ring-white/20",
                   )}
                 >
                   <span
-                    className={cn(
-                      "grid size-[76px] shrink-0 place-items-center rounded-[22px] transition-[translate,box-shadow] duration-500 ease-out-expo sm:size-[148px] sm:rounded-[32px]",
-                      "group-hover:-translate-y-1 group-focus-visible:-translate-y-1",
-                      (isChosen || current === p.id) && "-translate-y-1",
-                    )}
-                    style={{
-                      color: p.color,
-                      background: `linear-gradient(150deg, color-mix(in oklab, ${p.color} 26%, var(--color-charcoal-2)), var(--color-charcoal) 75%)`,
-                      boxShadow:
-                        isChosen || current === p.id
-                          ? `0 0 0 2px var(--color-caramel), 0 24px 60px -24px color-mix(in oklab, ${p.color} 60%, transparent)`
-                          : `inset 0 0 0 1px color-mix(in oklab, ${p.color} 30%, transparent)`,
-                    }}
+                    aria-hidden
+                    className="pointer-events-none absolute -right-10 -top-10 size-40 rounded-full opacity-25 blur-2xl transition-opacity duration-500 group-hover:opacity-50"
+                    style={{ background: p.color }}
+                  />
+                  <span
+                    className="relative grid size-14 shrink-0 place-items-center rounded-2xl sm:size-16"
+                    style={{ color: p.color, background: `color-mix(in oklab, ${p.color} 16%, var(--color-ink))` }}
                   >
-                    <span className="sm:hidden">
-                      <ProfileGlyph id={p.id} size={38} strokeWidth={1.4} />
-                    </span>
-                    <span className="hidden sm:block">
-                      <ProfileGlyph id={p.id} size={68} strokeWidth={1.1} />
-                    </span>
+                    <ProfileGlyph id={p.id} size={30} strokeWidth={1.5} />
                   </span>
-                  <span className="min-w-0">
-                    <span className="block text-xl font-semibold text-snow sm:text-2xl">{p.label}</span>
+                  <span className="relative min-w-0 flex-1">
+                    <span className="flex items-center justify-between gap-3 text-xl font-extrabold tracking-[-0.02em] text-snow sm:text-2xl">
+                      {p.label}
+                      <ArrowRight size={20} aria-hidden className="text-mist transition-transform duration-300 group-hover:translate-x-1 group-hover:text-snow" />
+                    </span>
                     <span className="mt-1 block text-[0.95rem] leading-snug text-mist">{p.description}</span>
                   </span>
                 </button>
@@ -122,20 +128,9 @@ export function ProfileSelector({ mode }: { mode: "entry" | "manage" }) {
           })}
         </ul>
 
-        <p className="rise mt-10 max-w-md text-sm leading-relaxed text-fog" style={{ animationDelay: "420ms" }}>
-          Sem cadastro e sem senha. O perfil só muda a ordem das sugestões: todos os vídeos ficam disponíveis para todos.
+        <p className="rise mt-10 text-sm text-fog" style={{ animationDelay: "420ms" }}>
+          Vídeos educativos da <span className="font-semibold text-mist">{site.doctor.name}</span>, {site.doctor.specialty.toLowerCase()}.
         </p>
-
-        <div
-          className="rise mt-8 flex items-center gap-3 rounded-full bg-white/[0.04] py-1.5 pl-1.5 pr-5 ring-1 ring-white/[0.07]"
-          style={{ animationDelay: "500ms" }}
-        >
-          <Image src={avatars.sorriso.src} alt="" width={40} height={40} className="size-10 rounded-full object-cover" />
-          <span className="text-left text-sm leading-tight">
-            <span className="block text-snow">{site.doctor.name}</span>
-            <span className="text-fog">{site.doctor.specialty}</span>
-          </span>
-        </div>
       </section>
     </main>
   );

@@ -11,11 +11,11 @@ export function WatchedBadge({ videoId, className }: { videoId: string; classNam
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full bg-sage/15 px-2 py-0.5 text-[0.66rem] font-medium uppercase tracking-[0.12em] text-sage",
+        "inline-flex items-center gap-1 rounded-full bg-ink/70 px-2 py-1 text-[0.62rem] font-bold uppercase tracking-[0.12em] text-snow backdrop-blur-md",
         className,
       )}
     >
-      <CircleCheck size={12} aria-hidden /> Assistido
+      <CircleCheck size={12} className="text-orange-bright" aria-hidden /> Assistido
     </span>
   );
 }

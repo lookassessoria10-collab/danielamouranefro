@@ -1,6 +1,6 @@
 import Link from "next/link";
+import { Search } from "lucide-react";
 import { Logo } from "@/components/brand";
-import { CuriousIcon } from "@/components/icons";
 
 export default function NotFound() {
   return (
@@ -8,16 +8,16 @@ export default function NotFound() {
       <Link href="/" aria-label="Nefroflix — início">
         <Logo />
       </Link>
-      <span className="mt-12 grid size-20 place-items-center rounded-3xl bg-caramel/10 text-caramel">
-        <CuriousIcon size={40} strokeWidth={1.3} />
+      <span className="mt-12 grid size-16 place-items-center rounded-2xl bg-orange/15 text-orange-bright">
+        <Search size={28} aria-hidden />
       </span>
-      <h1 className="mt-6 font-display text-[2.6rem] leading-none text-snow sm:text-[3.4rem]">Esta página não está no acervo.</h1>
+      <h1 className="mt-6 text-display text-[2.4rem] text-snow sm:text-[3.2rem]">Esta página não está no acervo.</h1>
       <p className="mt-4 max-w-md text-mist">O endereço pode ter mudado. Que tal procurar o assunto ou começar pelas perguntas?</p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
-        <Link href="/busca" className="inline-flex h-12 items-center rounded-full bg-caramel px-6 font-semibold text-ink hover:bg-caramel-soft">
+        <Link href="/busca" className="inline-flex h-12 items-center rounded-full bg-orange px-6 font-bold text-ink hover:bg-orange-bright">
           Buscar um assunto
         </Link>
-        <Link href="/" className="inline-flex h-12 items-center rounded-full border border-white/20 px-6 font-medium text-snow hover:border-white/40">
+        <Link href="/" className="inline-flex h-12 items-center rounded-full bg-white/[0.08] px-6 font-semibold text-snow hover:bg-white/[0.14]">
           Ir para o início
         </Link>
       </div>

@@ -5,6 +5,9 @@ import { videos } from "../src/data/videos.ts";
 import { categories, collections, seriesList } from "../src/data/taxonomy.ts";
 import { discoveryPaths } from "../src/data/discovery.ts";
 import { profiles } from "../src/data/profiles.ts";
+import { existsSync } from "node:fs";
+
+const PHOTOS = ["modelo-renal", "consultorio", "retrato", "verde", "sorriso"];
 
 const errors = [];
 const warn = [];
@@ -39,6 +42,23 @@ for (const v of videos) {
   }
   for (const c of v.collections) if (!collectionIds.has(c)) err(`${v.id}: coleção inexistente (${c})`);
   if (v.series && !seriesIds.has(v.series)) err(`${v.id}: série inexistente (${v.series})`);
+  if (v.cover?.style === "frame") {
+    if (!existsSync(`public/frames/${v.id}.jpg`)) err(`${v.id}: falta o quadro public/frames/${v.id}.jpg (rode scripts/fetch-frames.mjs)`);
+    if (!(v.cover.faceY >= 0 && v.cover.faceY <= 100)) err(`${v.id}: faceY fora de 0–100`);
+  } else if (v.cover?.style === "type") {
+    if (!PHOTOS.includes(v.cover.photo)) err(`${v.id}: foto de capa inexistente (${v.cover.photo})`);
+  } else err(`${v.id}: capa ausente`);
+}
+for (const c of categories) if (!ids.has(c.coverVideo)) err(`Categoria ${c.id}: vídeo de capa inexistente (${c.coverVideo})`);
+for (const c of collections) if (c.photo && !PHOTOS.includes(c.photo)) err(`Coleção ${c.id}: foto inexistente (${c.photo})`);
+for (const s of seriesList) if (!PHOTOS.includes(s.photo)) err(`Série ${s.id}: foto inexistente (${s.photo})`);
+for (const path of discoveryPaths) if (!ids.has(path.coverVideo)) err(`Trilha ${path.id}: vídeo de capa inexistente (${path.coverVideo})`);
+for (const p of profiles) {
+  for (const h of p.hero) if (!PHOTOS.includes(h.photo)) err(`Perfil ${p.id}: foto de destaque inexistente (${h.photo})`);
+  for (const sec of p.sections) {
+    if (sec.kind === "rail" && sec.source.type === "videos") for (const id of sec.source.ids) if (!ids.has(id)) err(`Perfil ${p.id}: trilho "${sec.title}" com vídeo inexistente (${id})`);
+    if (sec.kind === "banner" && !PHOTOS.includes(sec.photo)) err(`Perfil ${p.id}: banner com foto inexistente (${sec.photo})`);
+  }
 }
 
 for (const c of categories) {

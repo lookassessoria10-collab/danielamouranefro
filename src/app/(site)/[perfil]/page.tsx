@@ -1,20 +1,23 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AboutDaniela } from "@/components/about-daniela";
-import { CategoryTile, CollectionCard, PosterCard, WideCard } from "@/components/cards/cards";
+import { CategoryTile, CollectionCard, PosterCard, VideoCard } from "@/components/cards/cards";
 import { DiscoveryFlow } from "@/components/discovery/discovery-flow";
+import { FeatureBanner } from "@/components/home/feature-banner";
 import { Hero, type HeroSlide } from "@/components/home/hero";
-import { ForYouRail, ProfileNote, ProfileSync, RecentRail } from "@/components/home/personal-rails";
+import { ContinueRail, ForYouRail, ProfileNote, ProfileSync } from "@/components/home/personal-rails";
 import { QuestionIndex } from "@/components/home/question-index";
 import { SeriesSpotlight } from "@/components/home/series-spotlight";
 import { Rail } from "@/components/rail";
 import { railItem } from "@/components/rail-items";
-import { getProfile, isProfileId, profiles, type HomeSection } from "@/data/profiles";
+import { banners, getProfile, isProfileId, profiles, type HomeSection, type RailSource } from "@/data/profiles";
+import type { Video } from "@/data/types";
 import {
   categories,
   collections,
   getCategory,
   getVideo,
+  getVideos,
   videosInCategory,
   videosInCollection,
 } from "@/lib/catalog";
@@ -31,6 +34,17 @@ export async function generateMetadata({ params }: PageProps<"/[perfil]">): Prom
   return { title: `Início · ${getProfile(perfil).label}`, alternates: { canonical: `/${perfil}` } };
 }
 
+function railVideos(source: RailSource): Video[] {
+  switch (source.type) {
+    case "collection":
+      return videosInCollection(source.id);
+    case "category":
+      return videosInCategory(source.id);
+    case "videos":
+      return getVideos(source.ids);
+  }
+}
+
 export default async function ProfileHome({ params }: PageProps<"/[perfil]">) {
   const { perfil } = await params;
   if (!isProfileId(perfil)) notFound();
@@ -41,107 +55,77 @@ export default async function ProfileHome({ params }: PageProps<"/[perfil]">) {
     return { video, category: getCategory(video.category)!, photo };
   });
 
-  const drinks = [...videosInCategory("agua-e-hidratacao"), ...videosInCategory("bebidas-e-chas")].sort(
-    (a, b) => b.featured - a.featured || a.number - b.number,
-  );
+  /** Vídeos dos dois trilhos seguintes a "Selecionados para você" (para não repetir conteúdo próximo). */
+  const nextRailIds = (index: number) =>
+    profile.sections
+      .slice(index + 1)
+      .filter((s): s is Extract<HomeSection, { kind: "rail" }> => s.kind === "rail")
+      .slice(0, 2)
+      .flatMap((s) => railVideos(s.source).map((v) => v.id));
 
-  const sections: Record<HomeSection, React.ReactNode> = {
-    "for-you": <ForYouRail profile={perfil} />,
-    recent: <RecentRail />,
-    "start-here": (
-      <Rail
-        eyebrow="Primeiros passos"
-        title="Comece por aqui"
-        href="/colecao/comece-por-aqui"
-        itemClassName={railItem.poster}
-      >
-        {videosInCollection("comece-por-aqui").map((v) => (
-          <PosterCard key={v.id} video={v} />
-        ))}
-      </Rail>
-    ),
-    discovery: <DiscoveryFlow />,
-    questions: <QuestionIndex videos={videosInCollection("perguntas-frequentes").slice(0, 6)} />,
-    kidneys: (
-      <Rail
-        eyebrow="Entenda seus rins"
-        title="Saúde renal"
-        description="Sinais do corpo, exames e condições renais."
-        href="/categoria/entenda-seus-rins"
-        itemClassName={railItem.poster}
-      >
-        {videosInCategory("entenda-seus-rins").map((v) => (
-          <PosterCard key={v.id} video={v} />
-        ))}
-      </Rail>
-    ),
-    drinks: (
-      <Rail
-        eyebrow="Água, bebidas e chás"
-        title="O que você bebe também importa"
-        href="/categoria/agua-e-hidratacao"
-        hrefLabel="Ver água e hidratação"
-        itemClassName={railItem.wide}
-      >
-        {drinks.map((v) => (
-          <WideCard key={v.id} video={v} />
-        ))}
-      </Rail>
-    ),
-    meds: (
-      <Rail
-        eyebrow="Medicamentos e tratamentos"
-        title="Medicamentos e cuidados"
-        href="/categoria/medicamentos-e-tratamentos"
-        itemClassName={railItem.poster}
-      >
-        {videosInCategory("medicamentos-e-tratamentos").map((v) => (
-          <PosterCard key={v.id} video={v} />
-        ))}
-      </Rail>
-    ),
-    habits: (
-      <Rail
-        eyebrow="Hábitos e dúvidas comuns"
-        title="No dia a dia"
-        href="/categoria/habitos-e-duvidas"
-        itemClassName={railItem.wide}
-      >
-        {videosInCategory("habitos-e-duvidas").map((v) => (
-          <WideCard key={v.id} video={v} />
-        ))}
-      </Rail>
-    ),
-    series: <SeriesSpotlight />,
-    collections: (
-      <Rail eyebrow="Para maratonar" title="Coleções" href="/explorar#colecoes" itemClassName={railItem.collection}>
-        {collections
-          .filter((c) => c.id !== "comece-por-aqui")
-          .map((c) => (
-            <CollectionCard key={c.id} collection={c} videos={videosInCollection(c.id)} />
-          ))}
-      </Rail>
-    ),
-    categories: (
-      <Rail eyebrow="Explorar" title="Navegue por tema" href="/explorar" itemClassName={railItem.category}>
-        {categories.map((c) => (
-          <CategoryTile key={c.id} category={c} count={videosInCategory(c.id).length} />
-        ))}
-      </Rail>
-    ),
-    about: <AboutDaniela />,
+  let bannerCount = 0;
+  const render = (section: HomeSection, index: number): React.ReactNode => {
+    switch (section.kind) {
+      case "continue":
+        return <ContinueRail />;
+      case "for-you":
+        return <ForYouRail profile={perfil} avoid={nextRailIds(index)} />;
+      case "rail": {
+        const videos = railVideos(section.source);
+        const poster = section.card === "poster";
+        return (
+          <Rail
+            eyebrow={section.eyebrow}
+            title={section.title}
+            href={section.href}
+            itemClassName={poster ? railItem.poster : railItem.landscape}
+          >
+            {videos.map((v) => (poster ? <PosterCard key={v.id} video={v} /> : <VideoCard key={v.id} video={v} />))}
+          </Rail>
+        );
+      }
+      case "discovery":
+        return <DiscoveryFlow />;
+      case "questions":
+        return (
+          <QuestionIndex
+            eyebrow={section.eyebrow}
+            title={section.title}
+            videos={videosInCollection("perguntas-frequentes").slice(0, 6)}
+          />
+        );
+      case "series":
+        return <SeriesSpotlight />;
+      case "banner":
+        return <FeatureBanner banner={banners[section.id]} photo={section.photo} reverse={bannerCount++ % 2 === 1} />;
+      case "browse":
+        return (
+          <div className="py-2 md:py-4">
+            <Rail eyebrow="Para maratonar" title="Coleções" href="/explorar#colecoes" itemClassName={railItem.collection}>
+              {collections.map((c) => (
+                <CollectionCard key={c.id} collection={c} videos={videosInCollection(c.id)} />
+              ))}
+            </Rail>
+            <Rail eyebrow="Os cinco temas do acervo" title="Navegue por tema" href="/explorar" itemClassName={railItem.category}>
+              {categories.map((c) => (
+                <CategoryTile key={c.id} category={c} count={videosInCategory(c.id).length} />
+              ))}
+            </Rail>
+          </div>
+        );
+      case "about":
+        return <AboutDaniela />;
+    }
   };
 
   return (
     <>
       <ProfileSync profile={perfil} />
       <Hero slides={slides} />
-      <div className="mt-2 md:-mt-4">
-        <ProfileNote profile={perfil} />
-      </div>
-      <div className="pt-4">
-        {profile.sections.map((key) => (
-          <div key={key}>{sections[key]}</div>
+      <ProfileNote profile={perfil} />
+      <div className="pt-2">
+        {profile.sections.map((section, index) => (
+          <div key={`${section.kind}-${index}`}>{render(section, index)}</div>
         ))}
       </div>
     </>

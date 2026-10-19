@@ -65,15 +65,15 @@ export function DrivePlayer({ video, className }: { video: Video; className?: st
       </div>
 
       {access === "restricted" ? (
-        <div role="note" className="mt-3 flex gap-3 rounded-2xl border border-caramel/25 bg-caramel/[0.07] p-3.5 text-sm leading-relaxed text-mist">
-          <TriangleAlert size={18} className="mt-0.5 shrink-0 text-caramel" aria-hidden />
+        <div role="note" className="mt-3 flex gap-3 rounded-2xl border border-orange/25 bg-orange/[0.07] p-3.5 text-sm leading-relaxed text-mist">
+          <TriangleAlert size={18} className="mt-0.5 shrink-0 text-orange" aria-hidden />
           <p>
             Não foi possível confirmar o acesso público a este vídeo. Se o player pedir login,{" "}
             <a
               href={driveViewUrl(video.driveId)}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-caramel-soft underline decoration-caramel/50 underline-offset-4 hover:decoration-caramel"
+              className="font-medium text-orange-bright underline decoration-orange/50 underline-offset-4 hover:decoration-orange"
             >
               abra no Google Drive
             </a>

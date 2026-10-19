@@ -1,6 +1,3 @@
-import { Coffee, Droplet, Pill, SunMoon, type LucideProps } from "lucide-react";
-import type { Category } from "@/data/types";
-
 type IconProps = React.SVGProps<SVGSVGElement> & { size?: number; strokeWidth?: number };
 
 const base = ({ size = 24, strokeWidth = 1.6, ...rest }: IconProps) => ({
@@ -19,16 +16,6 @@ const base = ({ size = 24, strokeWidth = 1.6, ...rest }: IconProps) => ({
 /** Contorno de rim usado no ícone, no logotipo e nas ilustrações. */
 export const KIDNEY_PATH =
   "M14.2 4.1C11.3 2.3 6.6 3.1 5.1 7.4c-1.3 3.7-.5 8.5 2.2 11.2 2.3 2.3 6 2.5 7.6.4 1-1.3.7-2.9-.3-4-.9-1-1-2.6-.1-3.7.9-1.1 2-1.7 2.1-3.3.1-1.6-1-3-2.4-3.9Z";
-
-export function KidneyIcon(props: IconProps) {
-  return (
-    <svg {...base(props)}>
-      <path d={KIDNEY_PATH} />
-      <path d="M14.9 12.6c1.7.2 3.2 1.4 3.6 3.3l.6 4.6" />
-      <path d="M11.2 9.6c-1 1.1-1 3.5.2 4.6" opacity=".55" />
-    </svg>
-  );
-}
 
 /** Perfil Paciente: rim + cuidado. */
 export function PatientIcon(props: IconProps) {
@@ -84,22 +71,4 @@ export function CoffeeCupIcon(props: IconProps) {
       <path d="M8 3.5c-.6.8.6 1.7 0 2.5M11.5 3.5c-.6.8.6 1.7 0 2.5" opacity=".7" />
     </svg>
   );
-}
-
-export function CategoryIcon({
-  icon,
-  ...props
-}: { icon: Category["icon"] } & Omit<LucideProps, "ref">) {
-  switch (icon) {
-    case "kidney":
-      return <KidneyIcon size={props.size as number} strokeWidth={props.strokeWidth as number} className={props.className} />;
-    case "droplet":
-      return <Droplet aria-hidden {...props} />;
-    case "cup":
-      return <Coffee aria-hidden {...props} />;
-    case "sun-moon":
-      return <SunMoon aria-hidden {...props} />;
-    case "pill":
-      return <Pill aria-hidden {...props} />;
-  }
 }

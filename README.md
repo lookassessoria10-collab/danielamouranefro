@@ -3,7 +3,7 @@
 Plataforma de vídeos educativos sobre saúde renal com a **Dra. Daniela Moura Landim**, médica nefrologista.
 *Suas perguntas encontram respostas em vídeo.*
 
-Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Motion · Lucide · pronto para a Vercel.
+Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Motion · Lucide · Manrope · pronto para a Vercel.
 Todas as páginas são geradas de forma estática; não há banco de dados, contas nem chaves de API.
 
 ---
@@ -44,6 +44,8 @@ Abra http://localhost:3000.
 | `npm run lint` | ESLint |
 | `npm run check:catalog` | Valida o catálogo: IDs únicos, relações, coleções, trilha e destaques |
 | `npm run check:drive` | Testa, sem login, se cada vídeo toca publicamente no Drive |
+| `node scripts/fetch-frames.mjs` | Baixa do Drive um quadro real de cada vídeo para as capas (`public/frames`) |
+| `node scripts/brand-assets.mjs` | Gera as versões do logotipo, as peças da abertura e os ícones a partir do arquivo oficial |
 
 ## Publicar na Vercel
 
@@ -82,7 +84,10 @@ Todo o conteúdo fica em `src/data/` — os componentes visuais não guardam tí
 1. Suba o vídeo no Drive (já compartilhado como "Qualquer pessoa com o link").
 2. Copie o ID do link (`drive.google.com/file/d/`**`ESTE_TRECHO`**`/view`).
 3. Em `src/data/videos.ts`, copie um bloco `video({...})`, crie um `id` novo (ex.: `"v28"`) e preencha os campos.
-4. Rode `npm run check:catalog` e `npm run check:drive`.
+4. Rode `node scripts/fetch-frames.mjs` para baixar o quadro da capa e ajuste `cover.faceY`
+   (altura do rosto no quadro, em %). Se o quadro tiver texto por cima ou estiver desfocado, use
+   `cover: { style: "type", photo: "retrato" }` — capa tipográfica com uma foto real da Dra. Daniela.
+5. Rode `npm run check:catalog` e `npm run check:drive`.
 
 O vídeo aparece automaticamente na categoria, na busca, nas coleções e nas sugestões.
 
@@ -90,12 +95,29 @@ O vídeo aparece automaticamente na categoria, na busca, nas coleções e nas su
 
 - **Resumos (`summary`)**: estão todos como `null` de propósito. Nenhuma descrição é exibida até
   alguém assistir ao vídeo e escrever um texto validado.
-- **Duração e data de publicação**: ficam `null` até haver o dado real. O site não mostra estimativas.
+- **Duração**: medida tocando cada vídeo no próprio player (19/10/2026). **Data de publicação** fica `null`
+  até haver o dado real. O site não mostra estimativas.
 - **Instagram, contato e registro (CRM/RQE)** em `src/data/site.ts`: os botões só aparecem quando preenchidos.
 - **Títulos e perguntas**: adaptados dos nomes dos arquivos, sem afirmar o conteúdo. Vale revisar
   depois de assistir, principalmente *Albumina*, *Sinais no rosto*, *Eletroestimulação* e *Projeto verão*.
 
 ---
+
+## Identidade visual
+
+- **Tokens** centralizados em `src/app/globals.css` (`@theme`): grafite quente `#171311`, superfícies
+  `#231D1A` e `#302722`, texto `#F3EEE8`/`#CFC5BB`, laranja `#E86A00`, marrom `#5A2B1B`, cinza quente
+  `#8A8179` e os claros `#E7E5DF`/`#F6F2EC`. Sem azul, roxo ou índigo.
+- **Tipografia:** Manrope (sem serifa), com o utilitário `text-display` para títulos de impacto.
+- **Logotipo oficial:** `src/assets/brand/nefroflix-logo-original.webp`. A versão para fundo escuro só troca a
+  cor do "Nefro" marrom por creme; o símbolo é usado do jeito que veio.
+- **Abertura:** as três formas do símbolo (rins e play) e a palavra são recortadas do arquivo oficial e
+  animadas com CSS (≈2,6 s). Toca uma vez por sessão (`sessionStorage`), pode ser pulada com clique ou tecla,
+  não aparece com "reduzir movimento" e não atrasa o carregamento nem o redirecionamento de perfil.
+- **Capas dos vídeos:** quadros reais de cada vídeo (`public/frames`), recortados para 16:9 ou 3:4 pela
+  altura do rosto. Os vídeos 02 e 04 usam capa tipográfica, porque o quadro tem texto por cima ou fica escuro.
+- **Fotografias:** cinco fotos reais em `src/assets/daniela`, com enquadramento para desktop e celular em
+  `src/lib/photos.ts`. Só recorte, enquadramento e gradientes — nenhuma alteração de feições.
 
 ## Decisões e limites conhecidos
 
@@ -105,7 +127,8 @@ O vídeo aparece automaticamente na categoria, na busca, nas coleções e nas su
 - **Aviso de acesso:** o site testa a miniatura pública de cada vídeo; se ela não carrega, mostra um
   aviso orientando a abrir no Drive. Isso não bloqueia o player.
 - **Tempo assistido:** o player do Drive não informa progresso, então não há barras de progresso.
-  O site registra apenas os vídeos abertos ("Vistos recentemente") e a marcação manual "Assistido".
+  O site registra apenas os vídeos abertos ("Continuar assistindo", sem retomar do ponto em que parou)
+  e a marcação manual "Assistido".
 - **Perfis, Minha lista e histórico** ficam no `localStorage` do navegador: sem conta, sem servidor,
   e não sincronizam entre aparelhos.
 - **Cache Components** está desligado no `next.config.ts`: com ele, uma página de vídeo deixada para trás
@@ -115,6 +138,6 @@ O vídeo aparece automaticamente na categoria, na busca, nas coleções e nas su
 ### Próximos passos sugeridos
 
 - Painel administrativo ou importação automática de metadados com a API do Google Drive.
-- Imagens de compartilhamento (Open Graph) por vídeo para WhatsApp e Instagram.
+- Imagens de compartilhamento (Open Graph) por vídeo; hoje todas as páginas usam a imagem geral da marca.
 - Se o volume de acessos crescer, o Drive pode limitar reproduções de arquivos muito acessados;
   nesse caso vale avaliar YouTube não listado ou Vimeo usando o mesmo catálogo.

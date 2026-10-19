@@ -6,9 +6,16 @@ import { library, useLibrary } from "@/lib/library";
 import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 
-type Props = { videoId: string; title: string; variant?: "icon" | "pill"; className?: string };
+type Props = {
+  videoId: string;
+  title: string;
+  variant?: "icon" | "pill";
+  /** Nos cards: no desktop só aparece ao passar o mouse (sempre visível se já estiver salvo). */
+  reveal?: boolean;
+  className?: string;
+};
 
-export function SaveButton({ videoId, title, variant = "icon", className }: Props) {
+export function SaveButton({ videoId, title, variant = "icon", reveal = false, className }: Props) {
   const { list, ready } = useLibrary();
   const saved = ready && list.includes(videoId);
 
@@ -27,7 +34,7 @@ export function SaveButton({ videoId, title, variant = "icon", className }: Prop
         transition={{ duration: 0.25 }}
         className="grid place-items-center"
       >
-        {saved ? <Check size={variant === "pill" ? 18 : 17} strokeWidth={2.4} /> : <Plus size={variant === "pill" ? 19 : 18} strokeWidth={2} />}
+        {saved ? <Check size={variant === "pill" ? 18 : 16} strokeWidth={2.6} /> : <Plus size={variant === "pill" ? 19 : 17} strokeWidth={2.2} />}
       </motion.span>
     </AnimatePresence>
   );
@@ -39,10 +46,8 @@ export function SaveButton({ videoId, title, variant = "icon", className }: Prop
         onClick={onClick}
         aria-pressed={saved}
         className={cn(
-          "inline-flex h-12 items-center gap-2 rounded-full border px-5 text-[0.95rem] font-medium transition-colors",
-          saved
-            ? "border-caramel/50 bg-caramel/10 text-caramel-soft"
-            : "border-white/20 bg-white/[0.04] text-snow hover:border-white/40 hover:bg-white/[0.08]",
+          "inline-flex h-12 items-center gap-2 rounded-full px-5 text-[0.95rem] font-semibold backdrop-blur-md transition-colors",
+          saved ? "bg-snow/15 text-snow ring-1 ring-orange/60" : "bg-snow/[0.12] text-snow hover:bg-snow/20",
           className,
         )}
       >
@@ -60,10 +65,11 @@ export function SaveButton({ videoId, title, variant = "icon", className }: Prop
       aria-label={saved ? `Remover “${title}” da Minha lista` : `Salvar “${title}” na Minha lista`}
       title={saved ? "Remover da Minha lista" : "Salvar na Minha lista"}
       className={cn(
-        "grid size-9 place-items-center rounded-full border backdrop-blur-md transition-colors",
-        saved
-          ? "border-caramel/60 bg-caramel text-ink"
-          : "border-white/25 bg-ink/50 text-snow hover:border-white/60 hover:bg-ink/70",
+        "grid size-8 place-items-center rounded-full backdrop-blur-md transition-[background-color,opacity,color] duration-300",
+        saved ? "bg-orange text-ink" : "bg-ink/55 text-snow ring-1 ring-white/25 hover:bg-ink/80",
+        reveal &&
+          !saved &&
+          "[@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/card:opacity-100 [@media(hover:hover)]:group-focus-within/card:opacity-100",
         className,
       )}
     >

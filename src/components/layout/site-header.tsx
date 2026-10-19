@@ -55,13 +55,13 @@ export function SiteHeader() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300",
         scrolled
-          ? "border-b border-white/[0.06] bg-ink/85 backdrop-blur-xl"
-          : "border-b border-transparent bg-gradient-to-b from-ink/90 via-ink/40 to-transparent",
+          ? "border-b border-white/[0.05] bg-ink/92 backdrop-blur-xl"
+          : "border-b border-transparent bg-gradient-to-b from-ink/80 via-ink/30 to-transparent",
       )}
     >
-      <div className="shell flex h-16 items-center gap-4 md:h-[72px] lg:gap-10">
+      <div className="shell flex h-14 items-center gap-4 md:h-16 lg:gap-9">
         <Link href={home} aria-label="Nefroflix — página inicial" className="shrink-0 rounded-md">
-          <Logo />
+          <Logo priority />
         </Link>
 
         <nav aria-label="Principal" className="hidden md:block">
@@ -74,7 +74,7 @@ export function SiteHeader() {
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "relative rounded-full px-3.5 py-2 text-[0.92rem] transition-colors",
+                      "relative rounded-full px-3 py-2 text-[0.88rem] font-semibold transition-colors",
                       active ? "text-snow" : "text-mist hover:text-snow",
                     )}
                   >
@@ -82,7 +82,7 @@ export function SiteHeader() {
                     {active && (
                       <motion.span
                         layoutId="nav-indicator"
-                        className="absolute inset-x-3.5 -bottom-0.5 h-0.5 rounded-full bg-caramel"
+                        className="absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-orange"
                       />
                     )}
                   </Link>
@@ -127,7 +127,7 @@ function HeaderSearch() {
       <div
         className={cn(
           "flex h-10 items-center overflow-hidden rounded-full border transition-[width,background-color,border-color] duration-300 ease-out-expo",
-          open ? "w-72 border-white/15 bg-charcoal/90" : "w-10 border-transparent",
+          open ? "w-72 border-white/15 bg-surface/90" : "w-10 border-transparent",
         )}
       >
         <button
@@ -200,7 +200,7 @@ function ProfileMenu() {
     return (
       <Link
         href="/"
-        className="rounded-full border border-white/15 px-3.5 py-2 text-sm text-snow transition-colors hover:border-caramel/60"
+        className="rounded-full bg-white/[0.08] px-3.5 py-2 text-sm font-semibold text-snow transition-colors hover:bg-white/[0.14]"
       >
         Escolher perfil
       </Link>
@@ -232,7 +232,7 @@ function ProfileMenu() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
             transition={{ duration: 0.2 }}
-            className="absolute right-0 top-full mt-3 w-72 origin-top-right rounded-2xl border border-white/10 bg-charcoal-2/98 p-2 shadow-lift backdrop-blur-xl"
+            className="absolute right-0 top-full mt-3 w-72 origin-top-right rounded-2xl border border-white/10 bg-surface/98 p-2 shadow-lift backdrop-blur-xl"
           >
             <p className="px-3 pb-2 pt-2 text-xs uppercase tracking-[0.16em] text-fog">Quem está assistindo?</p>
             <ul>
@@ -258,7 +258,7 @@ function ProfileMenu() {
                         <span className="block text-sm font-medium text-snow">{p.label}</span>
                         <span className="block truncate text-xs text-fog">{p.description}</span>
                       </span>
-                      {selected && <span className="size-2 rounded-full bg-caramel" aria-hidden />}
+                      {selected && <span className="size-2 rounded-full bg-orange" aria-hidden />}
                     </button>
                   </li>
                 );
